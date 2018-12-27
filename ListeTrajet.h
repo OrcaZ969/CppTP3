@@ -50,6 +50,9 @@ public:
 // de trajets (simples et/ou composés) ou un trajet composé.
 //
 //------------------------------------------------------------------------
+class TrajetSimple;
+class TrajetCompose;
+
 
 class ListeTrajet
 {
@@ -58,25 +61,25 @@ class ListeTrajet
 public:
 //----------------------------------------------------- Méthodes publiques
   	
-    bool IsVide (  );
+    bool IsVide (  ) const;
     // Mode d'emploi :
     // Renvoie true si cette liste de trajets est vide, sinon renvoie false
     // Contrat :
     // Aucun
 	
-	bool DejaExistant ( Trajet * unTrajet );
+    bool DejaExistant ( Trajet * unTrajet ) const;
     // Mode d'emploi :
     // Renvoie true si le trajet donné en paramètre existe déja, sinon renvoie false
     // Contrat :
     // Aucun
 	
-	char*  GetDebut ( );
+    char*  GetDebut ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de ville de départ de la liste trajet
     // Contrat :
     // Aucun
 
-    char* GetFin ( );
+    char* GetFin ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de ville d'arrivée de la liste trajet
     // Contrat :
@@ -88,7 +91,7 @@ public:
     // Contrat :
     // Aucun
 
-    void Display( );
+    void Display( ) const;
     // Mode d'emploi :
     // Affiche dans la console tous les trajets de cette liste 
 	// (c'est à dire sous forme d'une catalogue)
@@ -96,14 +99,14 @@ public:
     // Contrat :
     // Aucun
 	
-	char* toStringCompose ();
+    char* toStringCompose () const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères qui contient toutes les informations du trajet composé
 	// Utilisé dans la méthode char* toString() de la classe "TrajetCompose"
     // Contrat :
     // Aucun
 	
-    bool Recherche (const char*,const char*);
+    bool Recherche (const char*,const char*) const;
     // On entre la ville de départ et la ville d'arrivée du trajet recherché
 	// et la méthode affiche tous les trajets correspondant à cette recherche.
 	// Il effectue une recherche simple des trajets correspondant aux villes données
@@ -134,6 +137,7 @@ public:
 	void EnregistrerVA(ofstream & fout, string va);
 
 	void EnregistrerVDetVA(ofstream & fout, string vd, string va);
+	void Chargement(ifstream & fin);
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
@@ -184,8 +188,9 @@ protected:
 	// Contrat :
     // Aucun
 
-	void ChargementS(ifstream & fin);
 
+	TrajetSimple* ChargementS(ifstream & fin);
+   	TrajetCompose* ChargementC(ifstream & fin,ListeTrajet* liste,TrajetCompose* firstLevelTC,int* level);
 
 
 

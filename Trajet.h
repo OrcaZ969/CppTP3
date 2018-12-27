@@ -35,26 +35,26 @@ class Trajet
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    virtual char* toString (  )=0;
+    virtual char* toString (  )const =0;
     // Mode d'emploi :
     // Renvoie la chaîne de caractère qui contient toutes les informations du trajet
     // Contrat :
     // Aucun
 
-    virtual char* VilleDepart (  )=0;
+    virtual char* VilleDepart (  ) const =0;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville de départ du trajet
     // Contrat :
     // Aucun
 
     
-    virtual char* VilleArrivee (  )=0;
+    virtual char* VilleArrivee (  ) const =0;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville d'arrivée du trajet composé
     // Contrat :
     // Aucun
 
-	virtual void Enregistrer(ofstream & fout) const = 0;
+    virtual void Enregistrer(ofstream & fout) const = 0;
 	// Mode d'emploi :
    // Enregistre un nouveau trajet simple ou trajet composé dans le fichier de sortie fout.
    // Contrat :

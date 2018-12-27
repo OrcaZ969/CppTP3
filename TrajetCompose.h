@@ -25,6 +25,7 @@ Une liste chaînée contenant l'ensemble de trajets simples dont le trajet est c
 // Elle représente un trajet avec étape(s) d'une ville de départ vers une ville d'arrivée.
 // Ce trajet est décomposé en plusieurs trajets.
 //------------------------------------------------------------------------
+
 class ListeTrajet;
 
 class TrajetCompose : public Trajet
@@ -33,20 +34,19 @@ class TrajetCompose : public Trajet
 
 public:
 //----------------------------------------------------- Méthodes publiques
-
-    char* toString (  );
-    // Mode d'emploi :
+    friend class ListeTrajet;
+    char* toString (  ) const;
     // Renvoie la chaîne de caractère qui contient toutes les informations du trajet composé
     // Contrat :
     // Aucun
 
-    char* VilleDepart (  );
+    char* VilleDepart (  ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville de départ du trajet composé
     // Contrat :
     // Aucun
     
-    char* VilleArrivee(  );
+    char* VilleArrivee(  ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville d'arrivée du trajet composé
     // Contrat :
@@ -78,7 +78,7 @@ public:
     // Contrat :
     // Aucun
 	
-    TrajetCompose ( Trajet* unTrajet);
+    TrajetCompose ( ListeTrajet* unListe);
     // Mode d'emploi :
     // Créer un trajet composé à partir d'un premier trajet (simple ou composé)
     // Contrat :

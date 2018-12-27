@@ -27,7 +27,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-char* TrajetCompose::toString (  )
+char* TrajetCompose::toString (  ) const
 // Algorithme :
 // Utilise la méthode toStringCompose de la classe ListeTrajet
 {
@@ -37,14 +37,14 @@ char* TrajetCompose::toString (  )
 	
 } //----- Fin de toString (  )
 
-char* TrajetCompose::VilleDepart (  )
+char* TrajetCompose::VilleDepart (  ) const
 // Algorithme :
 // Utilise la méthode GetDebut de la classe ListeTrajet
 {
 	return pointerListe->GetDebut();
 } //----- Fin de VilleDepart (  )
 
-char* TrajetCompose::VilleArrivee ( )
+char* TrajetCompose::VilleArrivee ( ) const
 // Algorithme :
 // Utilise la méthode GetFin de la classe ListeTrajet
 {
@@ -93,11 +93,11 @@ TrajetCompose::TrajetCompose ( )
 } //----- Fin de TrajetCompose
 
 
-TrajetCompose::TrajetCompose ( Trajet* unTrajet)
+TrajetCompose::TrajetCompose ( ListeTrajet* unListe)
 // Algorithme :
 // Utilise le constructeur ListeTrajet(Trajet*)de ListeTrajet
+	:pointerListe(unListe) 
 {
-	pointerListe=new ListeTrajet(unTrajet);
 #ifdef MAP
     cout << "Appel au constructeur de <TrajetCompose(Trajet* unTrajet)>" << endl;
 #endif

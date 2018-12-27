@@ -27,32 +27,33 @@ using namespace std;
 // avec un moyen de transport.
 //------------------------------------------------------------------------
 
+
 class TrajetSimple : public Trajet
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    char* toString ( );
+    char* toString ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractère qui contient toutes les informations du trajet simple
     // Contrat : 
     // Aucun
     
-    char* VilleDepart ( );
+    char* VilleDepart ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville de départ du trajet simple
     // Contrat :
     // Aucun
 
-    char* VilleArrivee ( );
+    char* VilleArrivee ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de la ville d'arrivée du trajet simple
     // Contrat :
     // Aucun
 
-	void Enregistrer(ofstream & fout)const ;
-	// Mode d'emploi :
+    void Enregistrer(ofstream & fout)const ;
+   // Mode d'emploi :
    // Enregistre un nouveau trajet simple  dans le fichier de sortie fout.
    // Contrat :
    // Aucun

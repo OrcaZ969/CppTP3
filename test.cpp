@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <cstring>
 #include "Trajet.h"
 #include "TrajetSimple.h"
 #include "TrajetCompose.h"
@@ -25,13 +27,26 @@ void TestTS() {
 
 }
 
-/*void TestChargement() {
+void TestChargementS() {
+	ListeTrajet mylist;
+	ifstream fic("TestCh.txt");
+	string ligne;
+	while(getline(fic,ligne)){
+		if(ligne.compare("TS:")){
+			//mylist.ChargementS(fic);
+		}
+	}
+	mylist.Display();
+	
+
+}
+
+void TestChargement(){
 	ListeTrajet mylist;
 	ifstream fic("TestCh.txt");
 	mylist.Chargement(fic);
 	mylist.Display();
-
-}*/
+}
 
 void TestType() {
 	ListeTrajet mylist;
@@ -49,5 +64,5 @@ void TestType() {
 }
 
 int main(){
-	TestType();
+	TestChargement();
 }

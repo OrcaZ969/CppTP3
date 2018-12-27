@@ -26,7 +26,7 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-char*  TrajetSimple::toString (  )
+char*  TrajetSimple::toString (  ) const
 // Algorithme :
 // Calculer a priori l'espace nécessaire de chaîne de caractère pour representer l'information d'un trajet simple
 // Alouer l'espace puis le remplir avec la fonction strcpy et strcat 
@@ -53,12 +53,12 @@ char*  TrajetSimple::toString (  )
 } //----- Fin de toString (  )
 
 
-char* TrajetSimple::VilleDepart ( )
+char* TrajetSimple::VilleDepart ( ) const
 {
 	return villeDepart;
 } //----- Fin de VilleDepart ( )
 
-char* TrajetSimple::VilleArrivee ( )
+char* TrajetSimple::VilleArrivee ( ) const
 {
 	return villeArrivee;
 } //----- Fin de VilleArrivee ( )

@@ -27,14 +27,14 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
    
-bool ListeTrajet::IsVide ( )
+bool ListeTrajet::IsVide ( ) const
 // Algorithme :
 // La liste de trajet est vide quand le pointerTete ou le pointerFin est nullptr
 {
 	return pointerFin==nullptr;
 } //----- Fin de IsVide ( )
 
-bool ListeTrajet::DejaExistant (Trajet* pointerTrajet )
+bool ListeTrajet::DejaExistant (Trajet* pointerTrajet ) const
 // Algorithme :
 // faire un parcours de cette liste chaînée et comparer le résultat de toString() de chaque 
 // trajet dans cette liste avec celui du trajet à ajouter
@@ -63,18 +63,18 @@ bool ListeTrajet::DejaExistant (Trajet* pointerTrajet )
 	return exists;
 } //----- Fin de DejaExistant (Trajet* pointerTrajet )
   
-char* ListeTrajet::GetDebut ( )
+char* ListeTrajet::GetDebut ( ) const
 {
 	return pointerTete->unTrajet->VilleDepart();
 } //----- Fin de GetDebut ( )
   
-char* ListeTrajet::GetFin ( )
+char* ListeTrajet::GetFin ( ) const
 {
 	return pointerFin->unTrajet->VilleArrivee();
 
 } //----- Fin de GetFin ( )
 
-void ListeTrajet::Ajouter (Trajet * pointerTrajet )
+void ListeTrajet::Ajouter (Trajet * pointerTrajet ) 
 // Algorithme :
 // Il permet d'ajouter une nouvelle cellule à la liste chaînée
 // que forme ListeTrajet.
@@ -93,7 +93,7 @@ void ListeTrajet::Ajouter (Trajet * pointerTrajet )
 	}
 } //----- Fin de Ajouter (Trajet * pointerTrajet )
 
-void ListeTrajet::Display( )
+void ListeTrajet::Display( ) const
 // Algorithme :
 // faire un parcours de cette liste chaînée, afficher dans le console le résultat de toString()
 // de chaque trajet et leur indice
@@ -112,7 +112,7 @@ void ListeTrajet::Display( )
 	}
 } //----- Fin de Display( )  
   
-char* ListeTrajet::toStringCompose( )
+char* ListeTrajet::toStringCompose( ) const
 // Algorithme :
 // allouer d'abord l'espace de 200 char, puis faire un parcours de cette liste chaînée,
 // pré-calculer l'espace nécessaire pour ajouter l'information de chaque trajet,
@@ -154,7 +154,7 @@ char* ListeTrajet::toStringCompose( )
 	return string;		  
 } //----- Fin de toStringCompose( )
 
-bool ListeTrajet::Recherche (const char* villeDepart,const char* villeArrivee )
+bool ListeTrajet::Recherche (const char* villeDepart,const char* villeArrivee ) const
 // Il parcoure tout le catalogue et affiche chaque trajet dont les villes de départ
 // et d'arrivée correspondent aux villes données.
 // Il effectue une recherche simple des trajets correspondant aux villes données
@@ -182,7 +182,7 @@ bool ListeTrajet::Recherche (const char* villeDepart,const char* villeArrivee )
 	  return found;
   } //----- Fin de Recherche
 
-bool ListeTrajet::RechercheBK(const char* villeDepart,const char* villeArrivee)
+bool ListeTrajet::RechercheBK(const char* villeDepart,const char* villeArrivee) 
 // Algorithme :
 // définir dynamiquement une instance de ListeTrajet pour stocker temporairement le résultat de recherche
 // initialiser le compteur de solution à zéro
@@ -203,7 +203,7 @@ bool ListeTrajet::RechercheBK(const char* villeDepart,const char* villeArrivee)
 	return found;
 }//----- Fin de RechercheBK(const char* villeDepart,const char* villeArrivee)
 
-void ListeTrajet::Enregistrer(ofstream & fout)
+void ListeTrajet::Enregistrer(ofstream & fout) 
 // Algorithme :
 {
 	Cellule* courrent = pointerTete;
@@ -317,30 +317,29 @@ void ListeTrajet::EnregistrerType(ofstream & fout, int choix) { // choix = 1 -->
 	}
 }
 
-void ListeTrajet::ChargementS(ifstream & fin)
-// Algorithme :
-//
+void ListeTrajet::Chargement(ifstream & fin)
 {
+	cout<<"first here"<<endl;
 	string ligne;
-	while (getline(fin, ligne)) {
-		string vd;
-		string va;
-		string mt;
-		vector<string> lignes;
-		stringstream ss(ligne);
-		string a;
-		while (getline(ss, a, '.'))
+	while(getline(fin,ligne))
+	{
+		cout<<"in the while"<<endl;
+		if(ligne=="TS:")
 		{
-			lignes.push_back(a);
+			cout<<"in TS"<<endl;
+			TrajetSimple* t=ChargementS(fin);
+			this->Ajouter(t);
+			
 		}
-		vd = lignes.at(1);
-		va = lignes.at(2);
-		mt = lignes.at(3);
-		TrajetSimple *t = new TrajetSimple(vd.c_str(), va.c_str(), mt.c_str());
-		Ajouter(t);
+		if(ligne=="TC:")
+		{
+			cout<<"in TC"<<endl;
+			TrajetCompose* nouveauTC=new TrajetCompose;
+			int niveau=1;
+			this->Ajouter(ChargementC(fin,this,nouveauTC,&niveau));
+		}
 	}
-
-}//----- Fin de ChargementS
+}
 
 
 
@@ -451,3 +450,62 @@ void ListeTrajet::remettreAZero ( )
 	pointerTete=nullptr;
 	pointerFin=nullptr;
 } //----- Fin de Méthode
+
+TrajetSimple* ListeTrajet::ChargementS(ifstream & fin)
+// Algorithme :
+//
+{
+	cout<<"here"<<endl;
+	string ligne;
+	getline(fin,ligne);
+	cout<<ligne<<endl;
+	/*while (getline(fin, ligne)) {*/
+	string vd;
+	string va;
+	string mt;
+	vector<string> lignes;
+	stringstream ss(ligne);
+	string a;
+	while (getline(ss, a, '.'))
+	{
+		lignes.push_back(a);
+	}
+	vd = lignes.at(0);
+	va = lignes.at(1);
+	mt = lignes.at(2);
+	TrajetSimple *t = new TrajetSimple(vd.c_str(), va.c_str(), mt.c_str());
+        return t;
+	//}
+
+}//----- Fin de ChargementS
+
+
+TrajetCompose* ListeTrajet::ChargementC(ifstream & fin,ListeTrajet* liste,TrajetCompose* firstLevel,int* level)
+// Algorithme :
+//
+{	
+		string ligne;
+		while(getline(fin,ligne)){
+			if(ligne=="TS:"){
+				cout<<"I read a TS"<<endl;
+				firstLevel->Ajouter(ChargementS(fin));
+			}
+			if(ligne=="TC:"){
+				cout<<"I read a TC"<<endl;
+				TrajetCompose* nextLevel=new TrajetCompose;
+				(*level)++;
+				ChargementC(fin,firstLevel->pointerListe,nextLevel,level);
+			}
+			if(ligne=="fin"){
+				cout<<"I read fin"<<endl;
+				if(*level!=1){
+					cout<<"level is not 1: "<<*level<<endl;
+					liste->Ajouter(firstLevel);	
+				}
+				(*level)--;
+		 		return firstLevel;	
+			}
+		}
+		return firstLevel;
+	
+}//----- Fin de ChargementC

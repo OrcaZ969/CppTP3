@@ -9,7 +9,7 @@ CPPFLAGS= -g  -ansi -pedantic -Wall -std=c++11
 EDLFLAGS=
 RMFLAGS= -f
 EFFACE=clean
-EXE=menu
+EXE=test
 MODULE=TrajetSimple.h TrajetCompose.h ListeTrajet.h
 INT=$(MODULE) Trajet.h
 REAL=$(MODULE:.h=.cpp)
@@ -20,12 +20,12 @@ LIBPATH=
 
 .PHONY:$(EFFACE)
 
-$(EXE): $(OBJ) menu.o
+$(EXE): $(OBJ) test.o
 	$(ECHO) "Edl de executable"
-	$(EDL) $(EDLFLAGS)$(LIBPATH) $(EXE) menu.o $(OBJ) $(LIBS)
-menu.o: $(INT) $(REAL) $(EXE).cpp
-	$(ECHO) "Compil de <menu.cpp>"
-	$(COMP) $(CPPFLAGS) $(INCPATH) menu.cpp
+	$(EDL) $(EDLFLAGS)$(LIBPATH) $(EXE) test.o $(OBJ) $(LIBS)
+test.o: $(INT) $(REAL) $(EXE).cpp
+	$(ECHO) "Compil de <test.cpp>"
+	$(COMP) $(CPPFLAGS) $(INCPATH) test.cpp
 TrajetSimple.o: TrajetSimple.cpp TrajetSimple.h Trajet.h
 	$(ECHO) "Compil de <TrajetSimple.cpp>"
 	$(COMP) $(CPPFLAGS) $(INCPATH) TrajetSimple.cpp
@@ -36,4 +36,4 @@ ListeTrajet.o: $(INT) $(REAL)
 	$(ECHO) "Compil de <ListeTrajet.cpp>"
 	$(COMP) $(CPPFLAGS) $(INCPATH) ListeTrajet.cpp
 $(EFFACE):
-	$(RM) $(RMFLAGS) $(OBJ) core 
+	$(RM) $(RMFLAGS) $(OBJ) test.o core 
