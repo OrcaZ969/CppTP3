@@ -341,7 +341,52 @@ void ListeTrajet::Chargement(ifstream & fin)
 	}
 }
 
-
+void ListeTrajet::Chargement(ifstream &fin,int choix)
+//choix: 1-> TS 2->TC
+{
+	string ligne;
+	if(choix==1)
+	{
+		while(getline(fin,ligne))
+		{
+			if(ligne=="TS:")
+			{
+				TrajetSimple* nouveauTS=ChargementS(fin);
+				this->Ajouter(nouveauTS);
+			
+			}
+			if(ligne=="TC:")
+			{
+				TrajetCompose* nouveauTC=new TrajetCompose;
+				int niveau=1;
+				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
+				delete nouveauTC;
+			}
+		}
+	}
+	else if(choix==2)
+	{
+		cout<<"cmon man"<<endl;
+		while(getline(fin,ligne))
+		{
+			if(ligne=="TS:")
+			{
+				getline(fin,ligne);
+				continue;
+			}
+			if(ligne=="TC:")
+			{
+				TrajetCompose* nouveauTC=new TrajetCompose;
+				int niveau=1;
+				this->Ajouter(ChargementC(fin,this,nouveauTC,&niveau));
+			}
+	
+		}
+	}
+	else{
+		cout<<"Merci de saisir soit 1 soit 2 !"<<endl;
+	}
+}
 
 
 //------------------------------------------------- Surcharge d'opérateurs

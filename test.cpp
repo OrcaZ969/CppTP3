@@ -48,6 +48,26 @@ void TestChargement(){
 	mylist.Display();
 }
 
+void TestChargementTS(){
+	ListeTrajet mylist;
+	ifstream fic;
+	fic.open("TestChType1.txt");
+	if(fic){
+		mylist.Chargement(fic,1);
+	}else{
+		cerr<<"un probleme"<<endl;
+	}
+	fic.close();
+	mylist.Display();
+}
+
+void TestChargementTC(){
+	ListeTrajet mylist;
+	ifstream fic("TestChType.txt");
+	mylist.Chargement(fic,2);
+	mylist.Display();
+}
+
 void TestType() {
 	ListeTrajet mylist;
 	TrajetSimple* ts1 = new TrajetSimple("A", "B", "MT");
@@ -64,5 +84,5 @@ void TestType() {
 }
 
 int main(){
-	TestChargement();
+	TestChargementTS();
 }

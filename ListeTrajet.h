@@ -138,6 +138,7 @@ public:
 
 	void EnregistrerVDetVA(ofstream & fout, string vd, string va);
 	void Chargement(ifstream & fin);
+	void Chargement(ifstream &fin,int choix);
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
