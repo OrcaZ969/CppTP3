@@ -18,7 +18,7 @@ void TestTC(){
 
 }
 
-void TestTS() {
+void TestEnregistrement() {
 	TrajetSimple t1 = TrajetSimple("Lyon", "Bordeaux", "Train");
 	TrajetSimple t2 = TrajetSimple("Lyon", "Paris", "Train");
 	std::ofstream fic("Test.txt");
@@ -51,9 +51,9 @@ void TestChargement(){
 void TestChargementTS(){
 	ListeTrajet mylist;
 	ifstream fic;
-	fic.open("TestChType1.txt");
+	fic.open("TestChType.txt");
 	if(fic){
-		mylist.Chargement(fic,1);
+		mylist.Chargement(fic,true);
 	}else{
 		cerr<<"un probleme"<<endl;
 	}
@@ -64,10 +64,30 @@ void TestChargementTS(){
 void TestChargementTC(){
 	ListeTrajet mylist;
 	ifstream fic("TestChType.txt");
-	mylist.Chargement(fic,2);
+	mylist.Chargement(fic,false);
 	mylist.Display();
 }
 
+void TestChargementVD(){
+	ListeTrajet mylist;
+	ifstream fic("TestChType.txt");
+	mylist.Chargement(fic,true,"Paris");
+	mylist.Display();
+}
+
+void TestChargementVA(){
+	ListeTrajet mylist;
+	ifstream fic("TestChType.txt");
+	mylist.Chargement(fic,false,"Lyon");
+	mylist.Display();
+}
+
+void TestChargementVAetVD(){
+	ListeTrajet mylist;
+	ifstream fic("TestChType.txt");
+	mylist.Chargement("Nice","Lyon",fic);
+	mylist.Display();
+}
 void TestType() {
 	ListeTrajet mylist;
 	TrajetSimple* ts1 = new TrajetSimple("A", "B", "MT");
@@ -84,5 +104,5 @@ void TestType() {
 }
 
 int main(){
-	TestChargementTS();
+	TestEnregistrement();
 }

@@ -319,21 +319,18 @@ void ListeTrajet::EnregistrerType(ofstream & fout, int choix) { // choix = 1 -->
 
 void ListeTrajet::Chargement(ifstream & fin)
 {
-	cout<<"first here"<<endl;
+	cout<<"method sans"<<endl;
 	string ligne;
 	while(getline(fin,ligne))
 	{
-		cout<<"in the while"<<endl;
 		if(ligne=="TS:")
 		{
-			cout<<"in TS"<<endl;
 			TrajetSimple* t=ChargementS(fin);
 			this->Ajouter(t);
 			
 		}
 		if(ligne=="TC:")
 		{
-			cout<<"in TC"<<endl;
 			TrajetCompose* nouveauTC=new TrajetCompose;
 			int niveau=1;
 			this->Ajouter(ChargementC(fin,this,nouveauTC,&niveau));
@@ -341,9 +338,10 @@ void ListeTrajet::Chargement(ifstream & fin)
 	}
 }
 
-void ListeTrajet::Chargement(ifstream &fin,int choix)
-//choix: 1-> TS 2->TC
+void ListeTrajet::Chargement(ifstream &fin,bool choix)
+//choix: true-> TS false->TC
 {
+	cout<<"method type"<<endl;
 	string ligne;
 	if(choix==1)
 	{
@@ -353,7 +351,6 @@ void ListeTrajet::Chargement(ifstream &fin,int choix)
 			{
 				TrajetSimple* nouveauTS=ChargementS(fin);
 				this->Ajouter(nouveauTS);
-			
 			}
 			if(ligne=="TC:")
 			{
@@ -364,9 +361,8 @@ void ListeTrajet::Chargement(ifstream &fin,int choix)
 			}
 		}
 	}
-	else if(choix==2)
+	else 
 	{
-		cout<<"cmon man"<<endl;
 		while(getline(fin,ligne))
 		{
 			if(ligne=="TS:")
@@ -383,12 +379,93 @@ void ListeTrajet::Chargement(ifstream &fin,int choix)
 	
 		}
 	}
-	else{
-		cout<<"Merci de saisir soit 1 soit 2 !"<<endl;
-	}
 }
 
-
+void ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
+//choix:true->villeDepart false->villeArrivee
+{
+	cout<<"method va or vd"<<endl;
+	string ligne;
+	if(choix){
+		while(getline(fin,ligne))
+		{
+			if(ligne=="TS:")
+			{
+				TrajetSimple* nouveauTS=ChargementS(fin);
+				if(nouveauTS->VilleDepart()==ville){
+					this->Ajouter(nouveauTS);
+				}else{
+					delete nouveauTS;
+				}
+			
+			}
+			if(ligne=="TC:")
+			{
+				TrajetCompose* nouveauTC=new TrajetCompose;
+				int niveau=1;
+				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
+				if(nouveauTC->VilleDepart()==ville){
+					this->Ajouter(nouveauTC);
+				}else{
+					delete nouveauTC;
+				}
+			}
+		}
+	}
+	else{
+		while(getline(fin,ligne))
+		{
+			if(ligne=="TS:")
+			{
+				TrajetSimple* nouveauTS=ChargementS(fin);
+				if(nouveauTS->VilleArrivee()==ville){
+					this->Ajouter(nouveauTS);
+				}else{
+					delete nouveauTS;
+				}
+			
+			}
+			if(ligne=="TC:")
+			{
+				TrajetCompose* nouveauTC=new TrajetCompose;
+				int niveau=1;
+				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
+				if(nouveauTC->VilleArrivee()==ville){
+					this->Ajouter(nouveauTC);
+				}else{
+					delete nouveauTC;
+				}
+			}
+		}
+	}
+}
+void ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin)
+{
+	string ligne;
+	while(getline(fin,ligne))
+	{
+		if(ligne=="TS:")
+		{
+			TrajetSimple* nouveauTS=ChargementS(fin);
+			if(nouveauTS->VilleArrivee()==villeArrivee&&nouveauTS->VilleDepart()==villeDepart){
+				this->Ajouter(nouveauTS);
+			}else{
+				delete nouveauTS;
+			}
+		}
+		if(ligne=="TC:")
+		{	
+			TrajetCompose* nouveauTC=new TrajetCompose;
+			int niveau=1;
+			nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
+			if(nouveauTC->VilleArrivee()==villeArrivee&&nouveauTC->VilleDepart()==villeDepart){
+				this->Ajouter(nouveauTC);
+			}else{
+				delete nouveauTC;
+			}
+		}
+	}
+}
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
@@ -500,11 +577,8 @@ TrajetSimple* ListeTrajet::ChargementS(ifstream & fin)
 // Algorithme :
 //
 {
-	cout<<"here"<<endl;
 	string ligne;
 	getline(fin,ligne);
-	cout<<ligne<<endl;
-	/*while (getline(fin, ligne)) {*/
 	string vd;
 	string va;
 	string mt;
@@ -520,7 +594,6 @@ TrajetSimple* ListeTrajet::ChargementS(ifstream & fin)
 	mt = lignes.at(2);
 	TrajetSimple *t = new TrajetSimple(vd.c_str(), va.c_str(), mt.c_str());
         return t;
-	//}
 
 }//----- Fin de ChargementS
 
@@ -532,19 +605,15 @@ TrajetCompose* ListeTrajet::ChargementC(ifstream & fin,ListeTrajet* liste,Trajet
 		string ligne;
 		while(getline(fin,ligne)){
 			if(ligne=="TS:"){
-				cout<<"I read a TS"<<endl;
 				firstLevel->Ajouter(ChargementS(fin));
 			}
 			if(ligne=="TC:"){
-				cout<<"I read a TC"<<endl;
 				TrajetCompose* nextLevel=new TrajetCompose;
 				(*level)++;
 				ChargementC(fin,firstLevel->pointerListe,nextLevel,level);
 			}
 			if(ligne=="fin"){
-				cout<<"I read fin"<<endl;
 				if(*level!=1){
-					cout<<"level is not 1: "<<*level<<endl;
 					liste->Ajouter(firstLevel);	
 				}
 				(*level)--;
