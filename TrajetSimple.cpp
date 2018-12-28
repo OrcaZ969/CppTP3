@@ -64,8 +64,7 @@ char* TrajetSimple::VilleArrivee ( ) const
 } //----- Fin de VilleArrivee ( )
 
 void TrajetSimple::Enregistrer(ofstream & fout) const {
-	fout << "S";
-	fout << ".";
+	fout << "TS:"<<endl;
 	fout << villeDepart;
 	fout << ".";
 	fout << villeArrivee;

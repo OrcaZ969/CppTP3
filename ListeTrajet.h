@@ -127,20 +127,16 @@ public:
     void EnregistrerCompose(ofstream & fout);
 
 	
-	void EnregistrerType(ofstream & fout, int choix);
 
 	
 	void Enregistrer(ofstream & fout);
-
-	void EnregistrerVD(ofstream & fout, string vd);
-
-	void EnregistrerVA(ofstream & fout, string va);
-
-	void EnregistrerVDetVA(ofstream & fout, string vd, string va);
+	bool Enregistrer(ofstream & fout, bool choix);
+	bool Enregistrer(ofstream & fout, bool choix,string ville);
+	bool Enregistrer(string vd, string va,ofstream &fout);
 	void Chargement(ifstream & fin);
-	void Chargement(ifstream &fin,bool choix);
-	void Chargement(ifstream &fin,bool choix,string ville);
-	void Chargement(string villeDepart,string villeArrivee,ifstream &fin);
+	bool Chargement(ifstream &fin,bool choix);
+	bool Chargement(ifstream &fin,bool choix,string ville);
+	bool Chargement(string villeDepart,string villeArrivee,ifstream &fin);
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
