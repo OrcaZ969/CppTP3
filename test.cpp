@@ -57,7 +57,7 @@ void TestEnregistrementType() {
 	ofstream fic;
 	fic.open("TestEn.txt");
 	if(fic){
-		mylist.Enregistrer(fic,true);
+		mylist.Enregistrer(fic,false);
 	}else{
 		cerr<<"!"<<endl;
 	}
@@ -121,7 +121,7 @@ void TestChargementS() {
 
 void TestChargement(){
 	ListeTrajet mylist;
-	ifstream fic("TestEn.txt");
+	ifstream fic("Test.txt");
 	mylist.Chargement(fic);
 	mylist.Display();
 }
@@ -183,5 +183,5 @@ void TestEnregistrementType() {
 }*/
 
 int main(){
-	TestEnregistrementVDetVA();
+	TestChargement();
 }

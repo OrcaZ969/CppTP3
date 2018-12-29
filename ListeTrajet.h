@@ -129,14 +129,14 @@ public:
 	
 
 	
-	void Enregistrer(ofstream & fout);
-	bool Enregistrer(ofstream & fout, bool choix);
-	bool Enregistrer(ofstream & fout, bool choix,string ville);
-	bool Enregistrer(string vd, string va,ofstream &fout);
-	void Chargement(ifstream & fin);
-	bool Chargement(ifstream &fin,bool choix);
-	bool Chargement(ifstream &fin,bool choix,string ville);
-	bool Chargement(string villeDepart,string villeArrivee,ifstream &fin);
+	int Enregistrer(ofstream & fout);
+	int Enregistrer(ofstream & fout, bool choix);
+	int Enregistrer(ofstream & fout, bool choix,string ville);
+	int Enregistrer(string vd, string va,ofstream &fout);
+	int Chargement(ifstream & fin);
+	int Chargement(ifstream &fin,bool choix);
+ 	int Chargement(ifstream &fin,bool choix,string ville);
+	int Chargement(string villeDepart,string villeArrivee,ifstream &fin);
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 

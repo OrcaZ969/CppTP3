@@ -19,8 +19,8 @@ int main(){
 	cout<<"Saisir 3 pour afficher la catalogue"<<endl;
 	cout<<"Saisir 4 pour faire une recherche simple de parcours"<<endl;
 	cout<<"Saisir 5 pour faire une recherche avancée de parcours"<<endl;
-	cout <<"Saisir 6 pour faire une sauvegarde" << endl;
-	cout <<"Saisir 7 pour faire un chargement" << endl;
+	cout<<"Saisir 6 pour faire une sauvegarde" << endl;
+	cout<<"Saisir 7 pour faire un chargement" << endl;
 	cout<<"Saisir 8 pour quitter la catalogue"<<endl;
 	cout<<"===> Veuillez entrer votre choix:";
 	cin>>option;
@@ -140,151 +140,363 @@ int main(){
 			cout<<"--------fin de la recherche--------"<<endl<<endl;
 		}
 		else if (option == 6) // options de sauvegarde
-	    {
-		int choixSauv;
-		cout << ">>> Saisir 1 pour une sauvegarde sans critère de sélection." << endl;
-		cout << ">>> Saisir 2 pour une sauvegarde selon le type de trajet." << endl;
-		cout << ">>> Saisir 3 pour une sauvegarde selon la ville de départ et/ou la ville d'arrivée." << endl;
-		cout << ">>> Saisir 4 pour une sauvegarde selon une sélection de trajets." << endl;
-		cout << ">>> Saisir 5 pour quitter" << endl;
-		cin >> choixSauv;
-		while (choixSauv != 5)
-		{
-			if (choixSauv == 1) 
-			{
-				string nomFic; 
-				cout << "Veuillez entrer un nom de fichier !" << endl;
-				cin >> nomFic;
-				ofstream fic(nomFic+".txt");
-				myliste->Enregistrer(fic);
-			}
-			else if (choixSauv == 2)
-			{
-				int choixType;
-				cout << ">>> Saisir 1 pour une sauvegarde des trajets simples." << endl;
-				cout << ">>> Saisir 2 pour une sauvegarde des trajets composés." << endl;
-				cin >> choixType;
-				if (choixType == 1)
-				{
-					string nomFic;
-					cout << "Veuillez entrer un nom de fichier !" << endl;
+	   	{
+			if(myliste->IsVide()){
+				cout<<">>> message: catalogue vide!"<<endl<<endl;
+				
+				cout<<"-----------------------------------------------"<<endl;
+			}else{
+				int choixSauv;
+				cout<<">>> Vous avez 4 options:"<<endl;
+				cout << "    Saisir 1 pour une sauvegarde sans critère de sélection." << endl;
+				cout << "    Saisir 2 pour une sauvegarde selon le type de trajet." << endl;
+				cout << "    Saisir 3 pour une sauvegarde selon la ville de départ et/ou la ville d'arrivée." << endl;
+				cout << "    Saisir 4 pour une sauvegarde selon une sélection de trajets." << endl;
+				cout << "    Saisir 5 pour revenir au menu principal" << endl;
+				cout << "    ===> Veuillez entrer votre choix:";
+				cin >> choixSauv;
+				while(choixSauv<1||choixSauv>5){	
+					cout<<"    Veuillez entrer un chiffre entre 1 et 5"<<endl;
+					cout<<"    ===> Veuillez entrer votre choix:";
+					cin>>choixSauv;
+				}
+				cout<<"-----------------------------------------------"<<endl;
+				if (choixSauv == 1) {		
+					string nomFic; 
+					cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+					cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
 					cin >> nomFic;
 					ofstream fic(nomFic+".txt");
-					myliste->EnregistrerType(fic, 1);
-				} 
-				else
+					int nb=myliste->Enregistrer(fic);
+					cout<<nb<<" trajet(s) enregistré"<<endl;		
+				}
+				else if (choixSauv == 2){
+					int choixType;
+					cout << ">>> Vous avez 2 sous-options:"<<endl;
+					cout << "    Saisir 1 pour une sauvegarde des trajets simples." << endl;
+					cout << "    Saisir 2 pour une sauvegarde des trajets composés." << endl;
+					cout << "    ===> Veuillez entrer votre choix:";
+					cin >> choixType;
+					while(!(choixType==1||choixType==2)){
+						cout<<"    Veuillez entrer soit 1 soit 2"<<endl;
+						cout<<"    ===> Veuillez entrer votre choix:";
+						cin>>choixType;
+					}
+					if (choixType == 1){
+						string nomFic;
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						cin >> nomFic;
+						ofstream fic(nomFic+".txt");
+						int nb=myliste->Enregistrer(fic,true);
+						if(nb==0){
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<">>> message: aucun trajet simple dans ce catalogue !"<<endl;
+							cout<<">>> le fichier est créé mais rien n'est enregistré"<<endl;
+						}else{
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<nb<<" trajet(s) simple(s) enregistré(s)."<<endl;
+						}
+					}else{
+						string nomFic;
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						cin >> nomFic;
+						ofstream fic(nomFic+".txt");
+						int nb=myliste->Enregistrer(fic,false);
+						if(nb==0){
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<">>> message: aucun trajet composé dans ce catalogue !"<<endl;
+							cout<<">>> le fichier est créé mais rien n'est enregistré"<<endl;
+						}else{
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<nb<<" trajet(s) compos(é) enregistré(s)."<<endl;
+						}
+					}
+				}
+				else if (choixSauv == 3)
 				{
-					string nomFic;
-					cout << "Veuillez entrer un nom de fichier !" << endl;
-					cin >> nomFic;
-					ofstream fic(nomFic+".txt");
-					myliste->EnregistrerType(fic, 2);
+					int choixV;
+					cout << ">>> Vous avez 3 sous-options:"<<endl;
+					cout << "    Saisir 1 pour une sauvegarde à partir d'une ville de départ." << endl;
+					cout << "    Saisir 2 pour une sauvegarde à partir d'une ville d'arrivée." << endl;
+					cout << "    Saisir 3 pour une sauvegarde à partir d'une ville de départ et une ville d'arrivée." << endl;
+					cout<<  "    ===> Veuillez entrer votre choix:";
+					cin >> choixV;
+					while(choixV<1||choixV>3){
+						cout<<"    Veuillez entrer un chiffre entre 1 et 3"<<endl;
+						cout<<"    ===> Veuillez entrer votre choix:";
+						cin>>choixV;
+					}
+					if (choixV == 1) {
+						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
+						string vd;
+						cin >> vd;
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						string nomFic;
+						cin >> nomFic;
+						ofstream fic(nomFic + ".txt");
+						int nb=myliste->Enregistrer(fic,true,vd);
+						if(nb==0){
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" trouvé !"<<endl;
+							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+						}else{
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" enregistré(s) !"<<endl;
+						}
+					}
+					else if (choixV == 2) {
+						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
+						string va;
+						cin >> va;
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						string nomFic;
+						cin >> nomFic;
+						ofstream fic(nomFic + ".txt");
+						int nb=myliste->Enregistrer(fic,false, va);	
+						if(nb==0){
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<">>> message: aucun trajet dont la ville d'arrivée est "<<va<<" trouvé !"<<endl;
+							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+						}else{
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" enregistré(s) !"<<endl;
+						}
+					}
+					else{
+						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
+						string vd;
+						cin >> vd;
+						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
+						string va;
+						cin >> va;
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						string nomFic;
+						cin >> nomFic;
+						ofstream fic(nomFic + ".txt");
+						int nb=myliste->Enregistrer(vd,va,fic);
+						if(nb==0){
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" trouvé !"<<endl;
+							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+						}else{
+							cout<<"-----------------------------------------------"<<endl;
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<"et la ville d'arrivée est "<<va<<" enregistré(s) !"<<endl;	
+						}
+					}
 				}
-			}
-			else if (choixSauv == 3)
-			{
-				int choixV;
-				cout << ">>> Saisir 1 pour une sauvegarde à partir d'une ville de départ." << endl;
-				cout << ">>> Saisir 2 pour une sauvegarde à partir d'une ville d'arrivée." << endl;
-				cout << ">>> Saisir 3 pour une sauvegarde à partir d'une ville de départ et une ville d'arrivée." << endl;
-				cin >> choixV;
-				if (choixV == 1) {
-					cout << "Veuillez rentrer la ville de départ ! " << endl;
-					string vd;
-					cin >> vd;
-					cout << "Veuillez entrer un nom de fichier !" << endl;
-					string nomFic;
-					cin >> nomFic;
-					ofstream fic(nomFic + ".txt");
-					myliste->EnregistrerVD(fic, vd);
-				}
-				else if (choixV == 2) {
-					cout << "Veuillez rentrer la ville d'arrivée ! " << endl;
-					string va;
-					cin >> va;
-					cout << "Veuillez entrer un nom de fichier !" << endl;
-					string nomFic;
-					cin >> nomFic;
-					ofstream fic(nomFic + ".txt");
-					myliste->EnregistrerVA(fic, va);
+				else if(choixSauv==4)
+				{
 
 				}
-				else {
-					cout << "Veuillez rentrer la ville de départ ! " << endl;
-					string vd;
-					cin >> vd;
-					cout << "Veuillez rentrer la ville d'arrivée ! " << endl;
-					string va;
-					cin >> va;
-					cout << "Veuillez entrer un nom de fichier !" << endl;
-					string nomFic;
-					cin >> nomFic;
-					ofstream fic(nomFic + ".txt");
-					myliste->EnregistrerVDetVA(fic, vd,va);
+				else if(choixSauv==5)
+				{
+				//ne rien faire	
+				}
+				if(choixSauv!=5){
+					cout<<endl<<"--------fin de l'enregistrement--------"<<endl<<endl;
 				}
 			}
-			else
-			{
-
+		}
+		else if (option == 7)
+	       	{ // options de chargement 
+			int choixCh;
+			cout << ">>> Vous avez 4 options:"<<endl;
+			cout << "    Saisir 1 pour un chargement sans critère de sélection." << endl;
+			cout << "    Saisir 2 pour un chargement selon le type de trajet." << endl;
+			cout << "    Saisir 3 pour un chargement selon la ville de départ et/ou la ville d'arrivée." << endl;
+			cout << "    Saisir 4 pour un chargement selon une sélection de trajets." << endl;
+			cout << "    Saisir 5 pour revenir au menu principal" << endl;
+			cout << "    ===> Veuillez entrer votre choix:";
+			cin >> choixCh;
+			while(choixCh<1||choixCh>5){	
+				cout<<"    Veuillez entrer un chiffre entre 1 et 5"<<endl;
+				cout<<"    ===> Veuillez entrer votre choix:";
+				cin>>choixCh;
 			}
-			cout << ">>> Saisir 1 pour une sauvegarde sans critère de sélection." << endl;
-			cout << ">>> Saisir 2 pour une sauvegarde selon le type de trajet." << endl;
-			cout << ">>> Saisir 3 pour une sauvegarde selon la ville de départ et/ou la ville d'arrivée." << endl;
-			cout << ">>> Saisir 4 pour une sauvegarde selon une sélection de trajets." << endl;
-			cout << ">>> Saisir 5 pour quitter" << endl;
-			cin >> choixSauv;
-			cout << "-----------------------------------------------" << endl;
-		}
-		}
-		else if (option == 7) { // options de chargement 
-		int choixCh;
-		cout << ">>> Saisir 1 pour un chargement sans critère de sélection." << endl;
-		cout << ">>> Saisir 2 pour un chargement selon le type de trajet." << endl;
-		cout << ">>> Saisir 3 pour un chargement selon la ville de départ et/ou la ville d'arrivée." << endl;
-		cout << ">>> Saisir 4 pour un chargement selon une sélection de trajets." << endl;
-		cout << ">>> Saisir 5 pour quitter" << endl;
-		cin >> choixCh;
-		while (choixCh != 5)
-		{
+			cout<<"-----------------------------------------------"<<endl;
 			if (choixCh == 1)
-			{
-		
+			{	
+				string nomFic; 
+				ifstream fic;
+				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+				cin >> nomFic;
+				fic.open(nomFic+".txt");
+				while(!fic){
+					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
+					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
+					int retry;
+					cin>>retry;
+					if(!retry){
+						//réessayer
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						cin >> nomFic;
+						fic.open(nomFic+".txt");
+					}else{
+						break;
+					}
+				}
+				if(fic){
+					cout<<"-----------------------------------------------"<<endl;
+					int nb=myliste->Chargement(fic);
+					cout<<nb<<" trajet(s) chargé(s)"<<endl;		
+				}
 			}
 			else if (choixCh == 2)
 			{
 				int choixType;
-				cout << ">>> Saisir 1 pour un chargement des trajets simples." << endl;
-				cout << ">>> Saisir 2 pour un chargement des trajets composés." << endl;
+				cout << ">>> Vous avez 2 sous-options:"<<endl;
+				cout << "    Saisir 1 pour un chargement des trajets simples." << endl;
+				cout << "    Saisir 2 pour un chargement des trajets composés." << endl;
+				cout << "    ===> Veuillez entrer votre choix:";
 				cin >> choixType;
+				while(!(choixType==1||choixType==2)){	
+					cout<<"    Veuillez entrer un chiffre entre 1 et 5"<<endl;
+					cout<<"    ===> Veuillez entrer votre choix:";
+					cin>>choixType;
+				}
+				string nomFic; 
+				ifstream fic;
+				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+				cin >> nomFic;
+				fic.open(nomFic+".txt");
+				while(!fic){
+					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
+					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
+					int retry;
+					cin>>retry;
+					if(!retry){
+						//réessayer
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						cin >> nomFic;
+						fic.open(nomFic+".txt");
+					}else{
+						break;
+					}
+				}
 				if (choixType == 1)
 				{
-				
+					if(fic){
+						cout<<"-----------------------------------------------"<<endl;
+						int nb=myliste->Chargement(fic,true);
+						if(nb==0){
+							cout<<">>> message: aucun trajet simple dans ce fichier !"<<endl;
+						}else{
+							cout<<nb<<" trajet(s) simple(é) chargé(s)."<<endl;
+						}
+					}
 				}
-				else
-				{
-				
+				else{
+					if(fic){
+						cout<<"-----------------------------------------------"<<endl;
+						int nb=myliste->Chargement(fic,false);
+						if(nb==0){
+							cout<<">>> message: aucun trajet composé dans ce fichier !"<<endl;
+						}else{
+							cout<<nb<<" trajet(s) compos(é) chargé(s)."<<endl;
+						}
+					}
 				}
 			}
 			else if (choixCh == 3)
 			{
-
+				int choixV;
+				cout << ">>> Vous avez 3 sous-options:"<<endl;
+				cout << "    Saisir 1 pour un chargement à partir d'une ville de départ." << endl;
+				cout << "    Saisir 2 pour un chargement à partir d'une ville d'arrivée." << endl;
+				cout << "    Saisir 3 pour un chargement à partir d'une ville de départ et une ville d'arrivée." << endl;
+				cout<<  "    ===> Veuillez entrer votre choix:";
+				cin >> choixV;
+				while(choixV<1||choixV>3){
+					cout<<"    Veuillez entrer un chiffre entre 1 et 3"<<endl;
+					cout<<"    ===> Veuillez entrer votre choix:";
+					cin>>choixV;
+				}
+				string nomFic; 
+				ifstream fic;
+				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+				cin >> nomFic;
+				fic.open(nomFic+".txt");
+				while(!fic){
+					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
+					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
+					int retry;
+					cin>>retry;
+					if(!retry){
+						//réessayer
+						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+						cin >> nomFic;
+						fic.open(nomFic+".txt");
+					}else{
+						break;
+					}
+				}
+				if (choixV == 1)
+				{
+					if(fic){
+						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
+						string vd;
+						cin >> vd;
+						cout<<"-----------------------------------------------"<<endl;
+						int nb=myliste->Chargement(fic,true,vd);
+						if(nb==0){
+							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" dans ce fichier !"<<endl;
+						}else{
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" chargé(s)"<<endl;
+						}
+					}
+				}
+				else if (choixV == 2)
+				{
+					if(fic){
+						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
+						string va;
+						cin >> va;
+						cout<<"-----------------------------------------------"<<endl;
+						int nb=myliste->Chargement(fic,true,va);
+						if(nb==0){
+							cout<<">>> message: aucun trajet dont la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
+						}else{
+							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" chargé(s)"<<endl;
+						}
+					}
+				}
+				else
+				{
+					if(fic){
+						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
+						string vd;
+						cin >> vd;
+						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
+						string va;
+						cin >> va;
+						cout<<"-----------------------------------------------"<<endl;
+						int nb=myliste->Chargement(vd,va,fic);
+						if(nb==0){
+							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
+						}else{
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" chargé(s)"<<endl;
+						}
+					}
+				}
 			}
-			else
+			else if (choixCh==4)
 			{
 
 			}
-			cout << ">>> Saisir 1 pour un chargement sans critère de sélection." << endl;
-			cout << ">>> Saisir 2 pour un chargement selon le type de trajet." << endl;
-			cout << ">>> Saisir 3 pour un chargement selon la ville de départ et/ou la ville d'arrivée." << endl;
-			cout << ">>> Saisir 4 pour un chargement selon une sélection de trajets." << endl;
-			cout << ">>> Saisir 5 pour quitter" << endl;
-			cin >> choixCh;
-			cout << "-----------------------------------------------" << endl;
-		}
-		
-			
-		
-		cout << "--------fin de la recherche--------" << endl << endl;
+			if(choixCh!=5){
+				cout<<endl<<"--------fin du chargement--------"<<endl<<endl;
+			}
 		}
 		else{
 			//si l'utilisateur a saisi un chiffre non compris entre 1 et 6
