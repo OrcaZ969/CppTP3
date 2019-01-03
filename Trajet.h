@@ -3,10 +3,10 @@
 						     -
 Un déplacement d'une ville de départ vers une ville d'arrivée.
                              -------------------
-    début                : 23/11/2018
-    copyright            : (C) 2018 par 32_08
-    e-mail               : mengxin.zhang@insa-lyon.fr
-						   alexandra.lafaille@insa-lyon.fr
+	début                : 31/12/2018
+	copyright            : (C) 2018 par 32_08
+	e-mail               : mengxin.zhang@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <Trajet> (fichier Trajet.h) ----------------

@@ -1,0 +1,11 @@
+3         
+TS:
+Lyon.Bordeaux.Train.
+TC:
+TS:
+Lyon.Marseille.Bateau.
+TS:
+Marseille.Paris.Avion.
+fin
+TS:
+Lyon.Paris.Auto.

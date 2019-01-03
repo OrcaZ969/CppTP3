@@ -3,10 +3,10 @@
 						         -
 Une liste chaînée contenant l'ensemble de trajets simples dont le trajet est composé
                              -------------------
-    début                : 23/11/2018
-    copyright            : (C) 2018 par 32_08
-    e-mail               : mengxin.zhang@insa-lyon.fr
-						   alexandra.lafaille@insa-lyon.fr
+	début                : 31/12/2018
+	copyright            : (C) 2018 par 32_08
+	e-mail               : mengxin.zhang@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <TrajetCompose> (fichier TrajetCompose.h) ----------------
@@ -35,6 +35,7 @@ class TrajetCompose : public Trajet
 public:
 //----------------------------------------------------- Méthodes publiques
     friend class ListeTrajet;
+
     char* toString (  ) const;
     // Renvoie la chaîne de caractère qui contient toutes les informations du trajet composé
     // Contrat :
@@ -60,6 +61,12 @@ public:
     // Aucun
     
     void Enregistrer(ofstream & fout) const;
+	// Mode d'emploi :
+	// Enregistre un nouveau trajet compose  dans le fichier de sortie fout.
+	// fait appel à la méthode enregistrerCompose de la ListeTrajet.
+	// Contrat :
+	// Aucun
+
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
@@ -94,8 +101,9 @@ public:
 
 protected:
 //----------------------------------------------------- Méthodes protégées
-	ListeTrajet * pointerListe;
+	
 //----------------------------------------------------- Attributs protégés
+	ListeTrajet * pointerListe;
 
 };
 

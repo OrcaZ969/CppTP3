@@ -3,10 +3,10 @@
 						        -
 Une liste chaînée contenant l'ensemble de trajets simples dont le trajet est composé
                              -------------------
-    début                : 23/11/2018
-    copyright            : (C) 2018 par 32_08
-    e-mail               : mengxin.zhang@insa-lyon.fr
-						   alexandra.lafaille@insa-lyon.fr
+	début                : 31/12/2018
+	copyright            : (C) 2018 par 32_08
+	e-mail               : mengxin.zhang@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <TrajetCompose> (fichier TrajetCompose.cpp) ------------
@@ -62,8 +62,7 @@ bool TrajetCompose::Ajouter ( Trajet* unTrajet )
 	}else if(!strcmp(this->VilleArrivee(),unTrajet->VilleDepart())){
 		//Sinon,
 		//On vérifie la liaison entre les deux trajets simples successifs
-		pointerListe->Ajouter(unTrajet);
-		retour=true;
+		retour=pointerListe->Ajouter(unTrajet);
 	}else{
 		retour=false;
 	}

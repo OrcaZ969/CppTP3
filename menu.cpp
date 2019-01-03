@@ -1,3 +1,12 @@
+/*************************************************************************
+									menu
+							 -------------------
+	début                : 31/12/2018
+	copyright            : (C) 2018 par 32_08
+	e-mail               : mengxin.zhang@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
+*************************************************************************/
+
 // Rôle de <menu.cpp>
 // point d’entrée de notre programme. Il crée une instance de la classe
 // ListeTrajet et la détruit à la fin du programme. Il utilise les méthodes publiques de la
@@ -9,21 +18,125 @@
 #include "TrajetSimple.h"
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
 
+bool isNumber(string& line){
+	char *p=nullptr;
+	strtol(line.c_str(),&p,10);
+	return strlen(p)==0;
+}
+
+int enterNumber(){
+	string s;
+	cin>>s;
+	while(!isNumber(s)){
+		cout<<">>> message: Veuillez saisir un chiffre!"<<endl;
+		cin>>s;
+	}
+	return (int)strtol(s.c_str(),nullptr,10);
+}
+void tryOpenFile(ifstream &fic){
+	string nomFic;
+	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+	cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+	cin>>nomFic;
+	fic.open(nomFic+".txt");
+	while(!fic){
+		cerr<<">>> message: ce fichier n'existe pas!"<<endl;
+		cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
+		int retry;
+		retry=enterNumber();
+		if(!retry){
+			//réessayer
+			cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+			cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+			cin >> nomFic;
+			fic.open(nomFic+".txt");
+		}else{
+			break;
+		}
+	}
+}
+void enterNM(int length,int* n,int* m){
+	cout<<">>> Merci de saisir un intervalle (0<n<=m<="<<length<<")"<<endl;
+	cout << "¤ Saisir l'indice du premier trajet(n):";
+	*n=enterNumber();
+	while(!(*n>0&&*n<=length)){
+		if(*n<=0){
+			cout<<">>> message: n doit être supérieur au 0"<<endl;
+			cout << "¤ Saisir l'indice du premier trajet(n):";
+			*n=enterNumber();
+		}
+		if(*n>length){
+			cout<<">>> message: n dépasse la taille du catalogue"<<endl;
+			cout << "¤ Saisir l'indice du dernier trajet(n):";
+			*n=enterNumber();
+		}
+	}
+	cout << "¤ Saisir l'indice du dernier trajet(m):";
+	*m=enterNumber();
+	while(!(*m>0&&*m<=length)){
+		if(*m<=0){
+			cout<<">>> message: m doit être supérieur au 0"<<endl;
+			cout << "¤ Saisir l'indice du premier trajet(m):";
+			*m=enterNumber();
+		}
+		if(*m>length){
+			cout<<">>> message: m dépasse la taille du catalogue"<<endl;
+			cout << "¤ Saisir l'indice du dernier trajet(m):";
+			*m=enterNumber();
+		}
+	}
+	while(*n>*m){
+		cout<<">>> message: n ne doit pas être plus grand que m, réessayez"<<endl;
+		cout << "¤ Saisir l'indice du premier trajet(n):";
+		*n=enterNumber();
+		while(!(*n>0&&*n<=length)){
+			if(*n<=0){
+				cout<<">>> message: n doit être supérieur au 0"<<endl;
+				cout << "¤ Saisir l'indice du premier trajet(n):";
+				*n=enterNumber();
+			}
+			if(*n>length){
+				cout<<">>> message: n dépasse la taille du catalogue"<<endl;
+				cout << "¤ Saisir l'indice du dernier trajet(n):";
+				*n=enterNumber();
+			}
+		}
+		cout << "¤ Saisir l'indice du dernier trajet(m):";
+		*m=enterNumber();
+		while(!(*m>0&&*m<=length)){
+			if(*m<=0){
+				cout<<">>> message: m doit être supérieur au 0"<<endl;
+				cout << "¤ Saisir l'indice du premier trajet(m):";
+				*m=enterNumber();
+			}
+			if(*m>length){
+				cout<<">>> message: m dépasse la taille du catalogue"<<endl;
+				cout << "¤ Saisir l'indice du dernier trajet(m):";
+				*m=enterNumber();
+			}
+		}
+	}
+}
 int main(){
 	ListeTrajet *myliste =new ListeTrajet;
 	int option;//variable qui représente le choix d'utilisateur
-	cout<<"		BIENVENUE"<<endl;
-	cout<<"Saisir 1 pour ajouter un trajet simple"<<endl;
-	cout<<"Saisir 2 pour ajouter un trajet compose"<<endl;
-	cout<<"Saisir 3 pour afficher la catalogue"<<endl;
-	cout<<"Saisir 4 pour faire une recherche simple de parcours"<<endl;
-	cout<<"Saisir 5 pour faire une recherche avancée de parcours"<<endl;
-	cout<<"Saisir 6 pour faire une sauvegarde" << endl;
-	cout<<"Saisir 7 pour faire un chargement" << endl;
-	cout<<"Saisir 8 pour quitter la catalogue"<<endl;
+	cout<<"-------------------BIENVENUE--------------------"<<endl;
+	cout<<"- Saisir 1 pour ajouter un trajet simple."<<endl;
+	cout<<"- Saisir 2 pour ajouter un trajet compose."<<endl;
+	cout<<"- Saisir 3 pour afficher la catalogue."<<endl;
+	cout<<"- Saisir 4 pour faire une recherche simple de parcours."<<endl;
+	cout<<"- Saisir 5 pour faire une recherche avancée de parcours."<<endl;
+	cout<<"- Saisir 6 pour faire une sauvegarde." << endl;
+	cout<<"- Saisir 7 pour faire un chargement." << endl;
+	cout<<"- Saisir 8 pour quitter la catalogue."<<endl;
 	cout<<"===> Veuillez entrer votre choix:";
-	cin>>option;
+	option=enterNumber();
+	while(option>8||option<1){
+		cout<<">>> message: Veuillez entrer un chiffre entre 1 et 8"<<endl;
+		option=enterNumber();
+	}
 	cout<<"-----------------------------------------------"<<endl;
 	while(option!=8){
 		if(option==1){
@@ -39,13 +152,12 @@ int main(){
 			cout<<"¤ Entrer le moyen de transport:"<<endl;
 			cin.getline(moyenTransport,50);
 			TrajetSimple* ts=new TrajetSimple(villeDepart,villeArrivee,moyenTransport);
-			if(myliste->DejaExistant(ts)){
+			if(!myliste->Ajouter(ts)){
 				//le cas où ce trajet existe déjà ==> message d'erreur
 				cout<<">>> message: ce trajet existe déjà!"<<endl;
 				cout<<"----------trajet non ajouté---------"<<endl<<endl;
 				delete ts;
 			}else{
-				myliste->Ajouter(ts);
 				cout<<"--------trajet simple ajouté--------"<<endl<<endl;
 			}
 		}
@@ -71,15 +183,14 @@ int main(){
 					delete ts;
 				}
 				cout<<"---\n"<<"¤ Saisir 0 pour continuer ou un autre chiffre pour retourner au menu principal: ";
-				cin>>goOn;
+				goOn=enterNumber();
 			}while(!goOn);	
-			if(myliste->DejaExistant(tc)){
+			if(!myliste->Ajouter(tc)){
 				//le cas où ce trajet existe déjà ==> message d'erreur
 				cout<<">>> message: ce trajet existe déjà!"<<endl;
 				cout<<"----------trajet non ajouté---------"<<endl<<endl;
 				delete tc;
 			}else{
-				myliste->Ajouter(tc);
 				cout<<"--------trajet composé ajouté--------"<<endl<<endl;
 			}
 		}
@@ -154,11 +265,11 @@ int main(){
 				cout << "    Saisir 4 pour une sauvegarde selon une sélection de trajets." << endl;
 				cout << "    Saisir 5 pour revenir au menu principal" << endl;
 				cout << "    ===> Veuillez entrer votre choix:";
-				cin >> choixSauv;
+				choixSauv=enterNumber();
 				while(choixSauv<1||choixSauv>5){	
 					cout<<"    Veuillez entrer un chiffre entre 1 et 5"<<endl;
 					cout<<"    ===> Veuillez entrer votre choix:";
-					cin>>choixSauv;
+					choixSauv=enterNumber();
 				}
 				cout<<"-----------------------------------------------"<<endl;
 				if (choixSauv == 1) {		
@@ -176,11 +287,11 @@ int main(){
 					cout << "    Saisir 1 pour une sauvegarde des trajets simples." << endl;
 					cout << "    Saisir 2 pour une sauvegarde des trajets composés." << endl;
 					cout << "    ===> Veuillez entrer votre choix:";
-					cin >> choixType;
+					choixType=enterNumber();
 					while(!(choixType==1||choixType==2)){
 						cout<<"    Veuillez entrer soit 1 soit 2"<<endl;
 						cout<<"    ===> Veuillez entrer votre choix:";
-						cin>>choixType;
+						choixType=enterNumber();
 					}
 					if (choixType == 1){
 						string nomFic;
@@ -222,11 +333,11 @@ int main(){
 					cout << "    Saisir 2 pour une sauvegarde à partir d'une ville d'arrivée." << endl;
 					cout << "    Saisir 3 pour une sauvegarde à partir d'une ville de départ et une ville d'arrivée." << endl;
 					cout<<  "    ===> Veuillez entrer votre choix:";
-					cin >> choixV;
+					choixV=enterNumber();
 					while(choixV<1||choixV>3){
 						cout<<"    Veuillez entrer un chiffre entre 1 et 3"<<endl;
 						cout<<"    ===> Veuillez entrer votre choix:";
-						cin>>choixV;
+						choixV=enterNumber();
 					}
 					if (choixV == 1) {
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
@@ -291,7 +402,17 @@ int main(){
 				}
 				else if(choixSauv==4)
 				{
-
+					int length=myliste->GetLength();
+					int n,m;
+					enterNM(length,&n,&m);
+					cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+					cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)" << endl;
+					string nomFic;
+					cin >> nomFic;
+					ofstream fic(nomFic + ".txt");
+					int nbEnreg=myliste->Enregistrer(n, m, fic);
+					cout<<"-----------------------------------------------"<<endl;
+					cout << nbEnreg << " trajet(s) enregistré(s)." << endl;
 				}
 				else if(choixSauv==5)
 				{
@@ -321,31 +442,13 @@ int main(){
 			cout<<"-----------------------------------------------"<<endl;
 			if (choixCh == 1)
 			{	
-				string nomFic; 
 				ifstream fic;
-				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-				cin >> nomFic;
-				fic.open(nomFic+".txt");
-				while(!fic){
-					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
-					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
-					int retry;
-					cin>>retry;
-					if(!retry){
-						//réessayer
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						cin >> nomFic;
-						fic.open(nomFic+".txt");
-					}else{
-						break;
-					}
-				}
+				tryOpenFile(fic);
 				if(fic){
 					cout<<"-----------------------------------------------"<<endl;
 					int nb=myliste->Chargement(fic);
-					cout<<nb<<" trajet(s) chargé(s)"<<endl;		
+					cout<<nb<<" trajet(s) chargé(s)"<<endl;
+					fic.close();		
 				}
 			}
 			else if (choixCh == 2)
@@ -355,54 +458,43 @@ int main(){
 				cout << "    Saisir 1 pour un chargement des trajets simples." << endl;
 				cout << "    Saisir 2 pour un chargement des trajets composés." << endl;
 				cout << "    ===> Veuillez entrer votre choix:";
-				cin >> choixType;
+				choixType=enterNumber();
 				while(!(choixType==1||choixType==2)){	
 					cout<<"    Veuillez entrer un chiffre entre 1 et 5"<<endl;
 					cout<<"    ===> Veuillez entrer votre choix:";
-					cin>>choixType;
+					choixType=enterNumber();
 				}
-				string nomFic; 
 				ifstream fic;
-				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-				cin >> nomFic;
-				fic.open(nomFic+".txt");
-				while(!fic){
-					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
-					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
-					int retry;
-					cin>>retry;
-					if(!retry){
-						//réessayer
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						cin >> nomFic;
-						fic.open(nomFic+".txt");
-					}else{
-						break;
-					}
-				}
+				tryOpenFile(fic);
 				if (choixType == 1)
 				{
 					if(fic){
 						cout<<"-----------------------------------------------"<<endl;
+						string s;
+						getline(fic,s);
+						int all=(int)strtol(s.c_str(),nullptr,10);
 						int nb=myliste->Chargement(fic,true);
 						if(nb==0){
-							cout<<">>> message: aucun trajet simple dans ce fichier !"<<endl;
+							cout<<">>> message: aucun NOUVEAU trajet simple dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) simple(é) chargé(s)."<<endl;
+							cout<<nb<<" trajet(s) simple(s) chargé(s) parmi "<<all<<" trajet(s) dans le fichier"<<endl;
 						}
+						fic.close();
 					}
 				}
 				else{
 					if(fic){
 						cout<<"-----------------------------------------------"<<endl;
+						string s;
+						getline(fic,s);
+						int all=(int)strtol(s.c_str(),nullptr,10);
 						int nb=myliste->Chargement(fic,false);
 						if(nb==0){
-							cout<<">>> message: aucun trajet composé dans ce fichier !"<<endl;
+							cout<<">>> message: aucun NOUVEAU trajet composé dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) compos(é) chargé(s)."<<endl;
+							cout<<nb<<" trajet(s) composé(s) chargé(s) "<<all<<" trajet(s) dans le fichier"<<endl;
 						}
+						fic.close();
 					}
 				}
 			}
@@ -420,60 +512,52 @@ int main(){
 					cout<<"    ===> Veuillez entrer votre choix:";
 					cin>>choixV;
 				}
-				string nomFic; 
 				ifstream fic;
-				cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-				cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-				cin >> nomFic;
-				fic.open(nomFic+".txt");
-				while(!fic){
-					cerr<<">>> message: ce fichier n'existe pas!"<<endl;
-					cout<<"    saisir 0 pour réessayer, autre chiffre pour revenir au menu principal:";
-					int retry;
-					cin>>retry;
-					if(!retry){
-						//réessayer
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						cin >> nomFic;
-						fic.open(nomFic+".txt");
-					}else{
-						break;
-					}
-				}
+				tryOpenFile(fic);
 				if (choixV == 1)
 				{
 					if(fic){
+						string s;
+						getline(fic,s);
+						int all=(int)strtol(s.c_str(),nullptr,10);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
 						cout<<"-----------------------------------------------"<<endl;
 						int nb=myliste->Chargement(fic,true,vd);
 						if(nb==0){
-							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" dans ce fichier !"<<endl;
+							cout<<">>> message: aucun NOUVEAU trajet dont la ville de départ est "<<vd<<" dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" chargé(s)"<<endl;
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" chargé(s) parmi "<<all<<" trajet(s) de ce fichier"<<endl;
 						}
+						fic.close();
 					}
 				}
 				else if (choixV == 2)
 				{
 					if(fic){
+						string s;
+						getline(fic,s);
+						int all=(int)strtol(s.c_str(),nullptr,10);
 						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
 						string va;
 						cin >> va;
 						cout<<"-----------------------------------------------"<<endl;
 						int nb=myliste->Chargement(fic,true,va);
 						if(nb==0){
-							cout<<">>> message: aucun trajet dont la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
+							cout<<">>> message: aucun NOUVEAU trajet dont la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" chargé(s)"<<endl;
+							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" chargé(s) parmi "<<all<<" trajet(s) de ce fichier"<<endl;
 						}
 					}
+					fic.close();
 				}
 				else
 				{
 					if(fic){
+						string s;
+						getline(fic,s);
+						int all=(int)strtol(s.c_str(),nullptr,10);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
@@ -483,36 +567,47 @@ int main(){
 						cout<<"-----------------------------------------------"<<endl;
 						int nb=myliste->Chargement(vd,va,fic);
 						if(nb==0){
-							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
+							cout<<">>> message: aucun NOUVEAU trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" chargé(s)"<<endl;
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" chargé(s) parmi "<<all<<" trajet(s) de ce fichier"<<endl;
 						}
 					}
+					fic.close();
 				}
 			}
 			else if (choixCh==4)
 			{
-
+				ifstream fic;
+				tryOpenFile(fic);
+				string s;
+				if(fic){
+					getline(fic,s);
+					int all=(int)strtol(s.c_str(),nullptr,10);
+					int n,m;
+					enterNM(all,&n,&m);
+					int nb=myliste->Chargement(n,m,fic);
+					cout<<"-----------------------------------------------"<<endl;
+					cout<<nb<<" trajet(s) chargé(s)"<<endl;
+				}
 			}
 			if(choixCh!=5){
 				cout<<endl<<"--------fin du chargement--------"<<endl<<endl;
 			}
 		}
-		else{
-			//si l'utilisateur a saisi un chiffre non compris entre 1 et 6
-			cout<<"Veuillez entrer un chiffre entre 1 et 6"<<endl;
-			cout<<"-----------------------------------------------"<<endl;
-		}
-		cout<<"Saisir 1 pour ajouter un trajet simple"<<endl;
-		cout<<"Saisir 2 pour ajouter un trajet compose"<<endl;
-		cout<<"Saisir 3 pour afficher la catalogue"<<endl;
-		cout<<"Saisir 4 pour faire une recherche simple de parcours"<<endl;
-		cout<<"Saisir 5 pour faire une recherche avancée de parcours"<<endl;
-		cout << "Saisir 6 pour faire une sauvegarde" << endl;
-		cout << "Saisir 7 pour faire un chargement" << endl;
-		cout<<"Saisir 8 pour quitter la catalogue"<<endl;
+		cout<<"- Saisir 1 pour ajouter un trajet simple"<<endl;
+		cout<<"- Saisir 2 pour ajouter un trajet compose"<<endl;
+		cout<<"- Saisir 3 pour afficher la catalogue"<<endl;
+		cout<<"- Saisir 4 pour faire une recherche simple de parcours"<<endl;
+		cout<<"- Saisir 5 pour faire une recherche avancée de parcours"<<endl;
+		cout << "- Saisir 6 pour faire une sauvegarde" << endl;
+		cout << "- Saisir 7 pour faire un chargement" << endl;
+		cout<<"- Saisir 8 pour quitter la catalogue"<<endl;
 		cout<<"===> Veuillez entrer votre choix:";
-		cin>>option;
+		option=enterNumber();
+		while(option>8||option<1){
+			cout<<">>> message: Veuillez entrer un chiffre entre 1 et 8"<<endl;
+			option=enterNumber();
+		}
 		cout<<"-----------------------------------------------"<<endl;
 	}
 	cout<<"		A BIENTOT!"<<endl;

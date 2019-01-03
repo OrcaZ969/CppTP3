@@ -3,10 +3,10 @@
 						       -
 Une liste chaînée pouvant représenter un trajet composé ou un catalogue de trajets (simples et/ou composés)
                              -------------------
-	début                : 23/11/2018
+	début                : 31/12/2018
 	copyright            : (C) 2018 par 32_08
 	e-mail               : mengxin.zhang@insa-lyon.fr
-						   alexandra.lafaille@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
 *************************************************************************/
 
 //---------- Réalisation de la classe <ListeTrajet> (fichier ListeTrajet.cpp) ------------
@@ -27,6 +27,12 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
    
+int ListeTrajet::GetLength ( ) const
+// Algorithme :
+// La liste de trajet est vide quand le pointerTete ou le pointerFin est nullptr
+{
+	return length;
+} //----- Fin de IsVide ( )
 bool ListeTrajet::IsVide ( ) const
 // Algorithme :
 // La liste de trajet est vide quand le pointerTete ou le pointerFin est nullptr
@@ -74,23 +80,31 @@ char* ListeTrajet::GetFin ( ) const
 
 } //----- Fin de GetFin ( )
 
-void ListeTrajet::Ajouter (Trajet * pointerTrajet ) 
+bool ListeTrajet::Ajouter (Trajet * pointerTrajet ) 
 // Algorithme :
 // Il permet d'ajouter une nouvelle cellule à la liste chaînée
 // que forme ListeTrajet.
 // Il traite le cas où la liste chaînée est initialement vide et
 // celui où elle ne l'est pas.
 {
-	if(pointerFin==nullptr){
-		Cellule* c=new Cellule(pointerTrajet);
-		pointerTete=c;
-		pointerFin=c;
+	bool ajout;
+	if(!DejaExistant(pointerTrajet)){
+		if(pointerFin==nullptr){
+			Cellule* c=new Cellule(pointerTrajet);
+			pointerTete=c;
+			pointerFin=c;
+		}
+		else{
+			Cellule* c=new Cellule(pointerTrajet);
+			pointerFin->suivant=c;
+			pointerFin=c;
+		}
+		length++;
+		ajout=true;
+	}else{
+		ajout=false;
 	}
-	else{
-		Cellule* c=new Cellule(pointerTrajet);
-		pointerFin->suivant=c;
-		pointerFin=c;
-	}
+	return ajout;
 } //----- Fin de Ajouter (Trajet * pointerTrajet )
 
 void ListeTrajet::Display( ) const
@@ -219,9 +233,9 @@ void ListeTrajet::EnregistrerCompose(ofstream & fout)
 
 
 int ListeTrajet::Enregistrer(ofstream & fout) 
-// Algorithme :
 {
 	int nb=0;
+	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
 	if (courrent != nullptr) {
 		do {
@@ -230,11 +244,15 @@ int ListeTrajet::Enregistrer(ofstream & fout)
 			courrent = courrent->suivant;
 		} while (courrent != nullptr);
 	}
+	fout.clear();
+	fout.seekp(0,ios::beg);
+	fout<<nb;
 	return nb;
-}
+} //Fin de Enregistrer
 
 int ListeTrajet::Enregistrer(ofstream & fout, bool choix) { // choix = true --> TS / choix ==false --> TC
 	int nb=0;
+	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
 	TrajetSimple* ptS = nullptr;
 	TrajetCompose * ptC = nullptr;
@@ -263,13 +281,17 @@ int ListeTrajet::Enregistrer(ofstream & fout, bool choix) { // choix = true --> 
 			} while (courrent != nullptr);
 		}
 	}
+	fout.clear();
+	fout.seekp(0,ios::beg);
+	fout<<nb;
 	return nb;
-}
+} //Fin de Enregistrer
 
 int ListeTrajet::Enregistrer(ofstream & fout,bool choix,string ville)
 //true->villeDepart false->villeArrivee
 {
 	int nb=0;
+	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
 	if (courrent != nullptr) {
 		if(choix)
@@ -293,10 +315,14 @@ int ListeTrajet::Enregistrer(ofstream & fout,bool choix,string ville)
 			}while(courrent != nullptr);
 		}
 	}
+	fout.clear();
+	fout.seekp(0,ios::beg);
+	fout<<nb;
 	return nb;
 }
 int ListeTrajet::Enregistrer(string vd,string va,ofstream &fout) {
 	int nb = 0;
+	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
 	if (courrent != nullptr) {
 		do {
@@ -307,8 +333,41 @@ int ListeTrajet::Enregistrer(string vd,string va,ofstream &fout) {
 			courrent = courrent->suivant;
 		} while (courrent != nullptr);
 	}
+	fout.clear();
+	fout.seekp(0,ios::beg);
+	fout<<nb;
 	return nb;
-}
+} //Fin de Enregistrer.
+
+int ListeTrajet::Enregistrer(int n, int m, ofstream &fout) {
+	int compteur = 1;
+	int nbEnreg = 0;
+	fout<<"          "<<endl;
+	Cellule* courrent = pointerTete;
+	if (courrent != nullptr) {
+		do {
+			if (compteur >= n && compteur <= m) {
+				courrent->unTrajet->Enregistrer(fout);
+				nbEnreg++;
+			}
+			courrent = courrent->suivant;
+			compteur++;
+		} while (courrent != nullptr);
+	}
+	compteur--; //car on a initialisé compteur à 1 donc il y'a toujours un trajet de plus.
+	if (m>compteur) {
+		cout << "Le dernier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
+	}
+	if (n>compteur) {
+		cout << "Le premier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
+
+	}
+	fout.clear();
+	fout.seekp(0,ios::beg);
+	fout<<nbEnreg;
+	return nbEnreg;
+} //Fin de Enregistrer
+
 
 
 
@@ -316,18 +375,18 @@ int ListeTrajet::Chargement(ifstream & fin)
 {
 	int nb=0;
 	string ligne;
+	getline(fin,ligne);
 	while(getline(fin,ligne))
 	{
 		if(ligne=="TS:")
 		{
 			TrajetSimple* nouveauTS=ChargementS(fin);
-			if(this->DejaExistant(nouveauTS)){
+			if(!this->Ajouter(nouveauTS)){
 				char* info=nouveauTS->toString();
 				cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 				delete[] info;
 				delete nouveauTS;
 			}else{
-				this->Ajouter(nouveauTS);
 				nb++;
 			}	
 		}
@@ -336,19 +395,18 @@ int ListeTrajet::Chargement(ifstream & fin)
 			TrajetCompose* nouveauTC=new TrajetCompose;
 			int niveau=1;
 			nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
-			if(this->DejaExistant(nouveauTC)){
+			if(!this->Ajouter(nouveauTC)){
 				char* info=nouveauTC->toString();
 				cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 				delete[] info;
 				delete nouveauTC;	
 			}else{
-				this->Ajouter(nouveauTC);
 				nb++;
 			}
 		}
 	}
 	return nb;
-}
+} //Fin de chargement
 
 int ListeTrajet::Chargement(ifstream &fin,bool choix)
 //choix: true-> TS false->TC
@@ -362,13 +420,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix)
 			if(ligne=="TS:")
 			{
 				TrajetSimple* nouveauTS=ChargementS(fin);
-				if(this->DejaExistant(nouveauTS)){
+				if(!this->Ajouter(nouveauTS)){
 					char* info=nouveauTS->toString();
 					cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 					delete[] info;
 					delete nouveauTS;
 				}else{
-					this->Ajouter(nouveauTS);
 					nb++;
 				}
 			}
@@ -395,13 +452,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix)
 				TrajetCompose* nouveauTC=new TrajetCompose;
 				int niveau=1;
 				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
-				if(this->DejaExistant(nouveauTC)){
+				if(!this->Ajouter(nouveauTC)){
 					char* info=nouveauTC->toString();
 					cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 					delete[] info;
 					delete nouveauTC;
 				}else{
-					this->Ajouter(nouveauTC);
 					nb++;
 				}
 			}
@@ -409,7 +465,7 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix)
 		}
 	}
 	return nb;
-}
+} //Fin de chargement
 
 int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 //choix:true->villeDepart false->villeArrivee
@@ -423,13 +479,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 			{
 				TrajetSimple* nouveauTS=ChargementS(fin);
 				if(nouveauTS->VilleDepart()==ville){
-					if(this->DejaExistant(nouveauTS)){
+					if(!this->Ajouter(nouveauTS)){
 						char* info=nouveauTS->toString();
 						cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 						delete[] info;
 						delete nouveauTS;
 					}else{
-						this->Ajouter(nouveauTS);
 						nb++;
 					}
 				}else{
@@ -443,13 +498,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 				int niveau=1;
 				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
 				if(nouveauTC->VilleDepart()==ville){
-					if(this->DejaExistant(nouveauTC)){
+					if(!this->Ajouter(nouveauTC)){
 						char* info=nouveauTC->toString();
 						cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 						delete[] info;
 						delete nouveauTC;
 					}else{
-						this->Ajouter(nouveauTC);
 						nb++;
 					}
 				}else{
@@ -465,13 +519,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 			{
 				TrajetSimple* nouveauTS=ChargementS(fin);
 				if(nouveauTS->VilleArrivee()==ville){
-					if(this->DejaExistant(nouveauTS)){
+					if(!this->Ajouter(nouveauTS)){
 						char* info=nouveauTS->toString();
 						cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 						delete[] info;
 						delete nouveauTS;
 					}else{
-						this->Ajouter(nouveauTS);
 						nb++;
 					}
 				}else{
@@ -485,13 +538,12 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 				int niveau=1;
 				nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
 				if(nouveauTC->VilleArrivee()==ville){
-					if(this->DejaExistant(nouveauTC)){
+					if(!this->Ajouter(nouveauTC)){
 						char* info=nouveauTC->toString();
 						cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 						delete[] info;
 						delete nouveauTC;
 					}else{
-						this->Ajouter(nouveauTC);
 						nb++;
 					}
 
@@ -502,7 +554,7 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 		}
 	}
 	return nb;
-}
+}  //Fin de chargement
 int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin)
 {
 	int nb=0;
@@ -513,14 +565,12 @@ int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin
 		{
 			TrajetSimple* nouveauTS=ChargementS(fin);
 			if(nouveauTS->VilleArrivee()==villeArrivee&&nouveauTS->VilleDepart()==villeDepart){
-				if(this->DejaExistant(nouveauTS))
-				{
+				if(!this->Ajouter(nouveauTS)){
 					char* info=nouveauTS->toString();
 					cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 					delete[] info;
 					delete nouveauTS;
 				}else{
-					this->Ajouter(nouveauTS);
 					nb++;
 				}
 			}else{
@@ -533,14 +583,12 @@ int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin
 			int niveau=1;
 			nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
 			if(nouveauTC->VilleArrivee()==villeArrivee&&nouveauTC->VilleDepart()==villeDepart){
-				if(this->DejaExistant(nouveauTC))
-				{	
+				if(!this->Ajouter(nouveauTC)){	
 					char* info=nouveauTC->toString();
 					cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 					delete [] info;
 					delete nouveauTC;
 				}else{
-					this->Ajouter(nouveauTC);
 					nb++;
 				}
 			}else{
@@ -549,13 +597,66 @@ int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin
 		}
 	}
 	return nb;
-}
+}  //Fin de chargement
+int ListeTrajet::Chargement(int n, int m, ifstream &fin) {
+	        int compteur = 0;
+		int nb = 0;
+		string ligne;
+	        while(getline(fin,ligne))
+       		{
+                	if(ligne=="TS:")
+                	{
+				compteur++;
+                        	TrajetSimple* nouveauTS=ChargementS(fin);
+                        	if(compteur>=n&&compteur<=m){
+					if(!this->Ajouter(nouveauTS)){
+                                		char* info=nouveauTS->toString();
+                                		cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
+                                		delete[] info;
+                                		delete nouveauTS;
+                        		}else{
+                                		nb++;
+                        		}
+				}else{
+					delete nouveauTS;
+				}
+                	}
+                	if(ligne=="TC:")
+                	{
+				compteur++;
+                        	TrajetCompose* nouveauTC=new TrajetCompose;
+                        	int niveau=1;
+                       	 	nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
+                        	if(compteur>=n&&compteur<=m){
+					if(!this->Ajouter(nouveauTC)){
+                                		char* info=nouveauTC->toString();
+                                		cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
+                                		delete[] info;
+                                		delete nouveauTC;
+                        		}else{
+                                		nb++;
+                        		}
+				}else{
+					delete nouveauTC;
+				}
+                	}
+        	}
+		if (m>compteur) {
+			cout << "Le dernier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
+		}	
+		if (n>compteur) {
+			cout << "Le premier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
+		}
+		return nb;
+
+} //Fin de Enregistrer
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
 //-------------------------------------------- Constructeurs - destructeur
 
-ListeTrajet::ListeTrajet ( )
+ListeTrajet::ListeTrajet ( ):
+	length(0)
 // Algorithme :
 //
 {
@@ -565,7 +666,7 @@ ListeTrajet::ListeTrajet ( )
     cout << "Appel au constructeur de <ListeTrajet()>" << endl;
 #endif
 } //----- Fin de ListeTrajet()
-
+/*
 ListeTrajet::ListeTrajet (Trajet* pointerTrajet )
 // Algorithme :
 //
@@ -577,7 +678,7 @@ ListeTrajet::ListeTrajet (Trajet* pointerTrajet )
     cout << "Appel au constructeur de <ListeTrajet(Trajet* pointerTrajet)>" << endl;
 #endif
 } //----- Fin de ListeTrajet (Trajet* pointerTrajet )
-
+*/
 
 ListeTrajet::~ListeTrajet ( )
 // Algorithme :

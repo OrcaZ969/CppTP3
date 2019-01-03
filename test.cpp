@@ -166,6 +166,12 @@ void TestChargementVAetVD(){
 	mylist.Chargement("Nice","Lyon",fic);
 	mylist.Display();
 }
+void TestChargementIntervalle(){
+	ListeTrajet mylist;
+	ifstream fic("TestChType.txt");
+	mylist.Chargement(2,6,fic);
+	mylist.Display();
+}
 /*
 void TestEnregistrementType() {
 	ListeTrajet mylist;
@@ -183,5 +189,5 @@ void TestEnregistrementType() {
 }*/
 
 int main(){
-	TestChargement();
+	TestChargementIntervalle();
 }

@@ -3,10 +3,10 @@
 						       -
 Une liste chaînée pouvant représenter un trajet composé ou un catalogue de trajets (simples et/ou composés)
                              -------------------
-	début                : 23/11/2018
+	début                : 31/12/2018
 	copyright            : (C) 2018 par 32_08
 	e-mail               : mengxin.zhang@insa-lyon.fr
-						   alexandra.lafaille@insa-lyon.fr
+						   manal.el-karchouni@insa-lyon.fr
 *************************************************************************/
 
 //---------- Interface de la classe <ListeTrajet> (fichier ListeTrajet.h) ----------------
@@ -20,10 +20,10 @@ Une liste chaînée pouvant représenter un trajet composé ou un catalogue de t
 #include <string>
 #include <sstream>
 #include <vector>
-using namespace std;
 #include "Trajet.h"
 #include "TrajetSimple.h"
 #include "TrajetCompose.h"
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -51,8 +51,8 @@ public:
 //
 //------------------------------------------------------------------------
 class TrajetSimple;
-class TrajetCompose;
 
+class TrajetCompose;
 
 class ListeTrajet
 {
@@ -73,19 +73,24 @@ public:
     // Contrat :
     // Aucun
 	
-    char*  GetDebut ( ) const;
+    int  GetLength ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de ville de départ de la liste trajet
     // Contrat :
     // Aucun
 
+    char*  GetDebut ( ) const;
+    // Mode d'emploi :
+    // Renvoie la chaîne de caractères de ville de départ de la liste trajet
+    // Contrat :
+    // Aucun
     char* GetFin ( ) const;
     // Mode d'emploi :
     // Renvoie la chaîne de caractères de ville d'arrivée de la liste trajet
     // Contrat :
     // Aucun
     
-    void Ajouter ( Trajet * unTrajet );
+    bool Ajouter ( Trajet * unTrajet );
     // Mode d'emploi :
     // Ajoute un trajet donné en paramètre à cette liste de trajets
     // Contrat :
@@ -125,18 +130,70 @@ public:
     // Aucun
 
     void EnregistrerCompose(ofstream & fout);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
 
-	
-
-	
 	int Enregistrer(ofstream & fout);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Enregistrer(ofstream & fout, bool choix);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Enregistrer(ofstream & fout, bool choix,string ville);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Enregistrer(string vd, string va,ofstream &fout);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
+	int Enregistrer(int n, int m, ofstream &fout);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Chargement(ifstream & fin);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Chargement(ifstream &fin,bool choix);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
  	int Chargement(ifstream &fin,bool choix,string ville);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 	int Chargement(string villeDepart,string villeArrivee,ifstream &fin);
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+	int Chargement(int n,int m,ifstream &fin );
+	// Mode d'emploi :
+	//
+	// Contrat :
+	// Aucun
+
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
 
@@ -189,13 +246,22 @@ protected:
 
 
 	TrajetSimple* ChargementS(ifstream & fin);
+	// Mode d'emploi :
+	// 
+	// Contrat :
+	// Aucun
    	TrajetCompose* ChargementC(ifstream & fin,ListeTrajet* liste,TrajetCompose* firstLevelTC,int* level);
+	// Mode d'emploi :
+	// 
+	// Contrat :
+	// Aucun
 
 
 
 //----------------------------------------------------- Attributs protégés
 	Cellule* pointerTete;
 	Cellule* pointerFin;
+	int length;
 };
 
 //-------------------------------- Autres définitions dépendantes de <ListeTrajet>
