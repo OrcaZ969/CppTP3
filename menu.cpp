@@ -57,6 +57,33 @@ void tryOpenFile(ifstream &fic){
 		}
 	}
 }
+void tryOpenReadingFile(ofstream &fic){
+	string nomFic;
+       	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+        cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
+        cin >> nomFic;
+       	ifstream fin(nomFic+".txt");
+       	if(fin){
+       		int i=1;
+          	bool ok=false;
+           		while(!ok){
+                       		fin.close();
+                            	cout<<">>> message: ce fichier existe déjà,saisir 0 pour réssayer,autre chiffre pour continuer(le contenu sera écrasé):";
+                               	i=enterNumber();
+                             	if(i){
+                                 	break;
+                               	}
+                             	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
+                             	cin >> nomFic;
+                             	ifstream fin(nomFic+".txt");
+                             	if(!fin){
+                                    	ok=true;
+                              	}
+                    	}
+     	}
+     	fin.close();
+       	fic.open(nomFic+".txt");
+}
 void enterNM(int length,int* n,int* m){
 	cout<<">>> Merci de saisir un intervalle (0<n<=m<="<<length<<")"<<endl;
 	cout << "¤ Saisir l'indice du premier trajet(n):";
@@ -272,14 +299,13 @@ int main(){
 					choixSauv=enterNumber();
 				}
 				cout<<"-----------------------------------------------"<<endl;
-				if (choixSauv == 1) {		
-					string nomFic; 
-					cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-					cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-					cin >> nomFic;
-					ofstream fic(nomFic+".txt");
+				if (choixSauv == 1) {
+					ofstream fic;		
+					tryOpenReadingFile(fic);
 					int nb=myliste->Enregistrer(fic);
-					cout<<nb<<" trajet(s) enregistré"<<endl;		
+					cout<<"-----------------------------------------------"<<endl;
+					cout<<nb<<" trajet(s) enregistré"<<endl;
+					fic.close();		
 				}
 				else if (choixSauv == 2){
 					int choixType;
@@ -294,12 +320,10 @@ int main(){
 						choixType=enterNumber();
 					}
 					if (choixType == 1){
-						string nomFic;
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						cin >> nomFic;
-						ofstream fic(nomFic+".txt");
+						ofstream fic;
+						tryOpenReadingFile(fic);
 						int nb=myliste->Enregistrer(fic,true);
+						fic.close();
 						if(nb==0){
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet simple dans ce catalogue !"<<endl;
@@ -309,12 +333,10 @@ int main(){
 							cout<<nb<<" trajet(s) simple(s) enregistré(s)."<<endl;
 						}
 					}else{
-						string nomFic;
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						cin >> nomFic;
-						ofstream fic(nomFic+".txt");
+						ofstream fic;
+						tryOpenReadingFile(fic);
 						int nb=myliste->Enregistrer(fic,false);
+						fic.close();
 						if(nb==0){
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet composé dans ce catalogue !"<<endl;
@@ -340,15 +362,13 @@ int main(){
 						choixV=enterNumber();
 					}
 					if (choixV == 1) {
+						ofstream fic;
+						tryOpenReadingFile(fic);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						string nomFic;
-						cin >> nomFic;
-						ofstream fic(nomFic + ".txt");
 						int nb=myliste->Enregistrer(fic,true,vd);
+						fic.close();
 						if(nb==0){
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" trouvé !"<<endl;
@@ -359,15 +379,15 @@ int main(){
 						}
 					}
 					else if (choixV == 2) {
+						ofstream fic;
+						tryOpenReadingFile(fic);
 						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
 						string va;
 						cin >> va;
 						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
 						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						string nomFic;
-						cin >> nomFic;
-						ofstream fic(nomFic + ".txt");
 						int nb=myliste->Enregistrer(fic,false, va);	
+						fic.close();
 						if(nb==0){
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville d'arrivée est "<<va<<" trouvé !"<<endl;
@@ -378,6 +398,8 @@ int main(){
 						}
 					}
 					else{
+						ofstream fic;
+						tryOpenReadingFile(fic);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
@@ -386,10 +408,8 @@ int main(){
 						cin >> va;
 						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
 						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
-						string nomFic;
-						cin >> nomFic;
-						ofstream fic(nomFic + ".txt");
 						int nb=myliste->Enregistrer(vd,va,fic);
+						fic.close();
 						if(nb==0){
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" trouvé !"<<endl;
@@ -402,15 +422,13 @@ int main(){
 				}
 				else if(choixSauv==4)
 				{
+					ofstream fic;
+					tryOpenReadingFile(fic);
 					int length=myliste->GetLength();
 					int n,m;
 					enterNM(length,&n,&m);
-					cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-					cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)" << endl;
-					string nomFic;
-					cin >> nomFic;
-					ofstream fic(nomFic + ".txt");
 					int nbEnreg=myliste->Enregistrer(n, m, fic);
+					fic.close();
 					cout<<"-----------------------------------------------"<<endl;
 					cout << nbEnreg << " trajet(s) enregistré(s)." << endl;
 				}
