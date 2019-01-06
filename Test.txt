@@ -1,6 +1,0 @@
-TC:
-TS:
-Lyon.Bordeaux.Train.
-TS:
-Lyon.Paris.Train.
-fin
