@@ -131,66 +131,88 @@ public:
 
     void EnregistrerCompose(ofstream & fout);
 	// Mode d'emploi :
-	//
+	// effectue une écriture d'un trajet composé, selon le format choisi, dans le fichier envoie en paramètre
+	// fout.
 	// Contrat :
 	// Aucun
 
 	int Enregistrer(ofstream & fout);
 	// Mode d'emploi :
-	//
+	// effectue l'écriture de tous les trajets contenus dans la liste des trajets (simples ou composés), 
+	// selon le format choisi, dans le fichier envoie en paramètre fout.
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
 	int Enregistrer(ofstream & fout, bool choix);
 	// Mode d'emploi :
-	//
+	// effectue l'écriture d'un trajet composé ou un trajet simple selon le choix envoyé en paramètre, 
+	// dans le fichier fout (choix = true --> TS / choix ==false --> TC)
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
 	int Enregistrer(ofstream & fout, bool choix,string ville);
 	// Mode d'emploi :
-	//
+	// effectue l'écriture d'un trajet selon la ville de départ ou d'arrivée, envoyée en paramètre, 
+	// dans le fichier fout (choix==true->villeDepart / choix==false->villeArrivee)
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
 	int Enregistrer(string vd, string va,ofstream &fout);
 	// Mode d'emploi :
-	//
+	// effectue l'écriture d'un trajet selon la ville de départ et d'arrivée, envoyées en paramètre, 
+	// dans le fichier fout.
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
 	int Enregistrer(int n, int m, ofstream &fout);
 	// Mode d'emploi :
-	//
+	// effectue l'écriture des trajets dont l'indice appartient à l'intervalle [n;m], 
+	// dans le fichier fout.
+	// n doit être strictement supérieur à 0 et m ne doit pas dépasser le nombre de 
+	// trajets contenus dans le catalogue.
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
 	int Chargement(ifstream & fin);
 	// Mode d'emploi :
-	//
+	// effectue la lecture de tous les trajets contenus dans le fichier envoyé en paramètre fout.
 	// Contrat :
 	// Aucun
 
 	int Chargement(ifstream &fin,bool choix);
 	// Mode d'emploi :
-	//
+	// effectue la lecture des trajets simples ou composés, selon le paramètre de choix, contenu dans 
+	// le fichier envoyé en paramètre fout. (choix: true-> TS false->TC)
 	// Contrat :
 	// Aucun
 
  	int Chargement(ifstream &fin,bool choix,string ville);
 	// Mode d'emploi :
-	//
+	// effectue la lecture d'un trajet selon la ville de départ ou d'arrivée, envoyée en paramètre, 
+	// contenu dans le fichier fout (choix==true->villeDepart / choix==false->villeArrivee)
 	// Contrat :
 	// Aucun
 
 	int Chargement(string villeDepart,string villeArrivee,ifstream &fin);
 	// Mode d'emploi :
-	//
+	// effectue la lecture d'un trajet selon la ville de départ et d'arrivée, envoyées en paramètre, 
+	// contenu dans le fichier fout.
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
+
 	int Chargement(int n,int m,ifstream &fin );
 	// Mode d'emploi :
-	//
+	// effectue la lecture des trajets dont l'indice appartient à l'intervalle [n;m], 
+	// contenus dans le fichier fout.
+	// n doit être strictement supérieur à 0 et m ne doit pas dépasser le nombre de 
+	// trajets contenus dans le fichier.
+	// renvoie le nombre de trajets enregistés.
 	// Contrat :
 	// Aucun
 
@@ -247,12 +269,14 @@ protected:
 
 	TrajetSimple* ChargementS(ifstream & fin);
 	// Mode d'emploi :
-	// 
+	// effectue la lecture des trajets simples contenus dans le fichier fin.
+	// renvoie un pointeur sur trajet simple.
 	// Contrat :
 	// Aucun
    	TrajetCompose* ChargementC(ifstream & fin,ListeTrajet* liste,TrajetCompose* firstLevelTC,int* level);
 	// Mode d'emploi :
-	// 
+	// effectue la lecture des trajets composés contenus dans le fichier fin.
+	// renvoie un pointeur sur trajet composé.
 	// Contrat :
 	// Aucun
 

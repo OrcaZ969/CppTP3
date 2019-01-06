@@ -1,39 +1,43 @@
-# Rôle de <makefile>
-# un fichier pour faciliter la compilation et l’éditer des liens des codes sources
+#Makefile generique
+#Outils
+CXX=g++
+LD=g++
+RM=rm
+ECHO=echo
 
-ECHO=@echo	
-RM=rm		
-COMP=g++ -c 
-EDL=g++ -o
-CPPFLAGS= -g  -ansi -pedantic -Wall -std=c++11
-EDLFLAGS=
-RMFLAGS= -f
-EFFACE=clean
-EXE=menu
-MODULE=TrajetSimple.h TrajetCompose.h ListeTrajet.h
-INT=$(MODULE) Trajet.h
-REAL=$(MODULE:.h=.cpp)
-OBJ=$(MODULE:.h=.o)
+#Options
+CXXFLAGS=-g  -ansi -pedantic -Wall -std=c++11 
+LDFLAGS=
+RMFLAGS=-rf
+
+#Fichiers
+HEAD=$(wildcard *.h)
+SRC=$(wildcard *.cpp)
+OBJ=$(SRC:.cpp=.o)
 LIBS=
-INCPATH=
-LIBPATH=
 
-.PHONY:$(EFFACE)
+#Cibles speciales
+EXE=menu
+RUN=execute
+CLEAN=clean
+.PHONY: $(CLEAN) $(RUN)
 
-$(EXE): $(OBJ) menu.o
-	$(ECHO) "Edl de executable"
-	$(EDL) $(EDLFLAGS)$(LIBPATH) $(EXE) menu.o $(OBJ) $(LIBS)
-menu.o: $(INT) $(REAL) $(EXE).cpp
-	$(ECHO) "Compil de <menu.cpp>"
-	$(COMP) $(CPPFLAGS) $(INCPATH) menu.cpp
-TrajetSimple.o: TrajetSimple.cpp TrajetSimple.h Trajet.h
-	$(ECHO) "Compil de <TrajetSimple.cpp>"
-	$(COMP) $(CPPFLAGS) $(INCPATH) TrajetSimple.cpp
-TrajetCompose.o: TrajetCompose.cpp TrajetCompose.h Trajet.h
-	$(ECHO) "Compil de <TrajetCompose.cpp>"
-	$(COMP) $(CPPFLAGS) $(INCPATH) TrajetCompose.cpp
-ListeTrajet.o: $(INT) $(REAL)
-	$(ECHO) "Compil de <ListeTrajet.cpp>"
-	$(COMP) $(CPPFLAGS) $(INCPATH) ListeTrajet.cpp
-$(EFFACE):
-	$(RM) $(RMFLAGS) $(OBJ) menu.o core 
+#Cibles
+$(EXE): $(OBJ)
+	@$(ECHO) Edition des liens
+	@$(LD) $(LDFLAGS) $^ -o $@ $(LIBS)
+
+$(RUN): $(EXE)
+	@$(ECHO) Execution de $^
+	@./$(EXE)
+
+$(CLEAN):
+	@$(RM) $(RMFLAGS) $(EXE) $(OBJ)
+
+#Dependances complementaires
+
+#Regles d'inference
+%.o: %.cpp
+	@$(ECHO) Compilation de $<
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+

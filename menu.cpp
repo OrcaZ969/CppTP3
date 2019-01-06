@@ -21,12 +21,15 @@
 #include <cstdlib>
 
 bool isNumber(string& line){
+// fonction qui sert à vérifier si string line est un nombre
 	char *p=nullptr;
 	strtol(line.c_str(),&p,10);
 	return strlen(p)==0;
+	//si string line n'est pas un nombre, il y aura des char stockés dans p
 }
 
 int enterNumber(){
+//fonction qui sert à la saisie d'un nombre
 	string s;
 	cin>>s;
 	while(!isNumber(s)){
@@ -36,6 +39,7 @@ int enterNumber(){
 	return (int)strtol(s.c_str(),nullptr,10);
 }
 void tryOpenFile(ifstream &fic){
+//gestion de nom de fichier pour le chargement
 	string nomFic;
 	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
 	cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
@@ -58,6 +62,7 @@ void tryOpenFile(ifstream &fic){
 	}
 }
 void tryOpenReadingFile(ofstream &fic){
+//gestion de nom de fichier pour l'enregistrement	
 	string nomFic;
        	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
         cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
@@ -85,6 +90,7 @@ void tryOpenReadingFile(ofstream &fic){
        	fic.open(nomFic+".txt");
 }
 void enterNM(int length,int* n,int* m){
+//fonction qui sert à la saisie de n m dans qui ne dépasse pas le length
 	cout<<">>> Merci de saisir un intervalle (0<n<=m<="<<length<<")"<<endl;
 	cout << "¤ Saisir l'indice du premier trajet(n):";
 	*n=enterNumber();
@@ -109,7 +115,7 @@ void enterNM(int length,int* n,int* m){
 			*m=enterNumber();
 		}
 		if(*m>length){
-			cout<<">>> message: m dépasse la taille du catalogue"<<endl;
+			cout<<">>> message: m dépasse la taille maximale"<<endl;
 			cout << "¤ Saisir l'indice du dernier trajet(m):";
 			*m=enterNumber();
 		}
@@ -384,8 +390,6 @@ int main(){
 						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
 						string va;
 						cin >> va;
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
 						int nb=myliste->Enregistrer(fic,false, va);	
 						fic.close();
 						if(nb==0){
@@ -406,8 +410,6 @@ int main(){
 						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
 						string va;
 						cin >> va;
-						cout << "¤ Veuillez entrer un nom de fichier !" << endl;
-						cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
 						int nb=myliste->Enregistrer(vd,va,fic);
 						fic.close();
 						if(nb==0){
@@ -510,7 +512,7 @@ int main(){
 						if(nb==0){
 							cout<<">>> message: aucun NOUVEAU trajet composé dans ce fichier !"<<endl;
 						}else{
-							cout<<nb<<" trajet(s) composé(s) chargé(s) "<<all<<" trajet(s) dans le fichier"<<endl;
+							cout<<nb<<" trajet(s) composé(s) chargé(s) parmi "<<all<<" trajet(s) dans le fichier"<<endl;
 						}
 						fic.close();
 					}

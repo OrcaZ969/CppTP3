@@ -219,6 +219,7 @@ bool ListeTrajet::RechercheBK(const char* villeDepart,const char* villeArrivee)
 
 void ListeTrajet::EnregistrerCompose(ofstream & fout)
 // Algorithme :
+// parcours de liste chaîné d'un trajet composé
 {
 	fout << "TC:" << endl;
 	Cellule* courrent = pointerTete;
@@ -233,8 +234,11 @@ void ListeTrajet::EnregistrerCompose(ofstream & fout)
 
 
 int ListeTrajet::Enregistrer(ofstream & fout) 
+// Algorithme :
+// parcours de liste chaîné du catalogue 
 {
 	int nb=0;
+	//on laisse assez de place pour écrire le nombre de trajets à la fin
 	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
 	if (courrent != nullptr) {
@@ -244,13 +248,16 @@ int ListeTrajet::Enregistrer(ofstream & fout)
 			courrent = courrent->suivant;
 		} while (courrent != nullptr);
 	}
+	//écriture au début
 	fout.clear();
 	fout.seekp(0,ios::beg);
-	fout<<nb;
+	if(nb) fout<<nb;
 	return nb;
 } //Fin de Enregistrer
 
 int ListeTrajet::Enregistrer(ofstream & fout, bool choix) { // choix = true --> TS / choix ==false --> TC
+// Algorithme :
+// utilise le dynamic_cast pour vérifier si un trajet est un trajet simple ou composé au moment de l'exécution
 	int nb=0;
 	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
@@ -274,6 +281,7 @@ int ListeTrajet::Enregistrer(ofstream & fout, bool choix) { // choix = true --> 
 				ptS = dynamic_cast<TrajetSimple*>(courrent->unTrajet);
 				ptC = dynamic_cast<TrajetCompose*>(courrent->unTrajet);
 				if (ptS == nullptr) {
+					// c'est un tc
 					courrent->unTrajet->Enregistrer(fout);
 					nb++;
 				}
@@ -283,13 +291,15 @@ int ListeTrajet::Enregistrer(ofstream & fout, bool choix) { // choix = true --> 
 	}
 	fout.clear();
 	fout.seekp(0,ios::beg);
-	fout<<nb;
+	if(nb) fout<<nb;
 	return nb;
 } //Fin de Enregistrer
 
-int ListeTrajet::Enregistrer(ofstream & fout,bool choix,string ville)
-//true->villeDepart false->villeArrivee
+int ListeTrajet::Enregistrer(ofstream & fout,bool choix,string ville)//true->villeDepart false->villeArrivee
+// Algorithme :
+// parcours de liste chaîné du catalogue avec un vérification au niveau de nom de ville
 {
+
 	int nb=0;
 	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
@@ -317,10 +327,12 @@ int ListeTrajet::Enregistrer(ofstream & fout,bool choix,string ville)
 	}
 	fout.clear();
 	fout.seekp(0,ios::beg);
-	fout<<nb;
+	if(nb) fout<<nb;
 	return nb;
 }
 int ListeTrajet::Enregistrer(string vd,string va,ofstream &fout) {
+// Algorithme :
+// parcours de liste chaîné du catalogue avec un vérification au niveau de nom de ville
 	int nb = 0;
 	fout<<"          "<<endl;
 	Cellule* courrent = pointerTete;
@@ -335,11 +347,13 @@ int ListeTrajet::Enregistrer(string vd,string va,ofstream &fout) {
 	}
 	fout.clear();
 	fout.seekp(0,ios::beg);
-	fout<<nb;
+	if(nb) fout<<nb;
 	return nb;
 } //Fin de Enregistrer.
 
 int ListeTrajet::Enregistrer(int n, int m, ofstream &fout) {
+// Algorithme :
+// parcours de liste chaîné en vérifiant que le compteur se trouve dans l'intervalle demandé
 	int compteur = 1;
 	int nbEnreg = 0;
 	fout<<"          "<<endl;
@@ -354,17 +368,9 @@ int ListeTrajet::Enregistrer(int n, int m, ofstream &fout) {
 			compteur++;
 		} while (courrent != nullptr);
 	}
-	compteur--; //car on a initialisé compteur à 1 donc il y'a toujours un trajet de plus.
-	if (m>compteur) {
-		cout << "Le dernier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
-	}
-	if (n>compteur) {
-		cout << "Le premier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
-
-	}
 	fout.clear();
 	fout.seekp(0,ios::beg);
-	fout<<nbEnreg;
+	if(nbEnreg) fout<<nbEnreg;
 	return nbEnreg;
 } //Fin de Enregistrer
 
@@ -372,6 +378,9 @@ int ListeTrajet::Enregistrer(int n, int m, ofstream &fout) {
 
 
 int ListeTrajet::Chargement(ifstream & fin)
+// Algorithme :
+// lire le ficher entier, si on lit "TS:", appelle la méthode protégée ChargementS
+// si on lit "TC:",appelle la méthode protégée ChargementC
 {
 	int nb=0;
 	string ligne;
@@ -382,6 +391,7 @@ int ListeTrajet::Chargement(ifstream & fin)
 		{
 			TrajetSimple* nouveauTS=ChargementS(fin);
 			if(!this->Ajouter(nouveauTS)){
+				//si ce trajet existe déjà dans le catalogue
 				char* info=nouveauTS->toString();
 				cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 				delete[] info;
@@ -396,6 +406,7 @@ int ListeTrajet::Chargement(ifstream & fin)
 			int niveau=1;
 			nouveauTC=ChargementC(fin,this,nouveauTC,&niveau);
 			if(!this->Ajouter(nouveauTC)){
+				//si ce trajet existe déjà dans le catalogue
 				char* info=nouveauTC->toString();
 				cout<<">>> message: le trajet suivant existe déjà dans le catalogue:"<<endl<<info<<endl;
 				delete[] info;
@@ -408,8 +419,11 @@ int ListeTrajet::Chargement(ifstream & fin)
 	return nb;
 } //Fin de chargement
 
-int ListeTrajet::Chargement(ifstream &fin,bool choix)
-//choix: true-> TS false->TC
+int ListeTrajet::Chargement(ifstream &fin,bool choix)//choix: true-> TS false->TC
+// Algorithme :
+// même algorithme que le chargement sans critère
+// si on lit un "TS:" alors que on veut les trajets composés, ignore la prochaine ligne lue
+// si on lit un "TC:" alors que on veut les trajets simple, appelle quand même ChargementC(), mais delete le trajet composé après
 {
 	int nb=0;
 	string ligne;
@@ -467,8 +481,10 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix)
 	return nb;
 } //Fin de chargement
 
-int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
-//choix:true->villeDepart false->villeArrivee
+int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)//choix:true->villeDepart false->villeArrivee
+// Algorithme :
+// même algorithme que le chargement sans critère
+// tous les trajets qui ne vérifient pas le critère de sélection seront deleted
 {
 	int nb=0;
 	string ligne;
@@ -556,6 +572,9 @@ int ListeTrajet::Chargement(ifstream &fin,bool choix,string ville)
 	return nb;
 }  //Fin de chargement
 int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin)
+// Algorithme :
+// même algorithme que le chargement sans critère
+// tous les trajets qui ne vérifient pas le critère de sélection seront deleted
 {
 	int nb=0;
 	string ligne;
@@ -599,6 +618,9 @@ int ListeTrajet::Chargement(string villeDepart,string villeArrivee,ifstream &fin
 	return nb;
 }  //Fin de chargement
 int ListeTrajet::Chargement(int n, int m, ifstream &fin) {
+// Algorithme :
+// même algorithme que le chargement sans critère
+// tous les trajets hors de cet intervalle seront deleted
 	        int compteur = 0;
 		int nb = 0;
 		string ligne;
@@ -641,12 +663,6 @@ int ListeTrajet::Chargement(int n, int m, ifstream &fin) {
 				}
                 	}
         	}
-		if (m>compteur) {
-			cout << "Le dernier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
-		}	
-		if (n>compteur) {
-			cout << "Le premier indice est plus grand que le nombre de trajets --> " << compteur << "." << endl;
-		}
 		return nb;
 
 } //Fin de Enregistrer
@@ -760,7 +776,7 @@ void ListeTrajet::remettreAZero ( )
 
 TrajetSimple* ListeTrajet::ChargementS(ifstream & fin)
 // Algorithme :
-//
+// utilise un vecteur de string pour récupérer les informations concernant un trajet simple
 {
 	string ligne;
 	getline(fin,ligne);
@@ -785,13 +801,18 @@ TrajetSimple* ListeTrajet::ChargementS(ifstream & fin)
 
 TrajetCompose* ListeTrajet::ChargementC(ifstream & fin,ListeTrajet* liste,TrajetCompose* firstLevel,int* level)
 // Algorithme :
-//
+// méthode récursive, level est un pointer de int qui représente le niveau d'imbrication d'un trajet composé
+// quand un trajet composé possède un autre trajet composé, level incrémente, le trajet père devient "liste", le trajet fils devient "firstLevel"
+// quand le marqueur "fin" est lu, si level=1, on renvoie le pointeur de trajet composé principal pour qu'il puisse être ajouté dans le catalogue
+// si level!=1, le trajet composé fils sera ajouté dans le trajet composé père.
 {	
 		string ligne;
 		while(getline(fin,ligne)){
 			if(ligne=="TS:"){
+				//sous trajet simple
 				TrajetSimple* nouveauTS=ChargementS(fin);
 				if(!firstLevel->Ajouter(nouveauTS)){
+					//si ce trajet simple n'est pas valable, delete ce trajet
 					char* info=nouveauTS->toString();
 					cout<<">>> message: le trajet suivant n'est pas valable et ne sera pas chargé:"<<endl<<info<<endl;
 					delete[] info;
@@ -799,14 +820,34 @@ TrajetCompose* ListeTrajet::ChargementC(ifstream & fin,ListeTrajet* liste,Trajet
 				}
 			}
 			if(ligne=="TC:"){
+				//sous trajet compose
 				TrajetCompose* nextLevel=new TrajetCompose;
+				//incrément le level
 				(*level)++;
+				//appel récursive:nextLevel devient "firstLevel",le ListeTrajet de "firstLevel" devient "liste"
 				ChargementC(fin,firstLevel->pointerListe,nextLevel,level);
 			}
 			if(ligne=="fin"){
 				if(*level!=1){
-					liste->Ajouter(firstLevel);	
+					//si level n'est pas 1, le liste représente forcément un trajet composé
+					if(liste->IsVide()){
+						//si le liste est vide, on peut toujours ajouter un sous trajet sans poser la question
+						liste->Ajouter(firstLevel);
+					}else{
+						// si il n'est pas vide
+						if(strcmp(liste->GetFin(),firstLevel->VilleDepart())){
+							//si ce sous trajet composé n'est pas valable, delete ce trajet
+							char* info=firstLevel->toString();
+							cout<<">>> message: le trajet suivant n'est pas valable et ne sera pas chargé:"<<endl<<info<<endl;
+							delete[] info;
+							delete firstLevel;
+						}else{
+							//on fait l'hypothèse que dans un trajet composé il n'y a pas deux sous trajets identiques
+							liste->Ajouter(firstLevel);
+						}
+					}
 				}
+				//decrémente le level
 				(*level)--;
 		 		return firstLevel;	
 			}
