@@ -140,7 +140,7 @@ public:
 	// Mode d'emploi :
 	// effectue l'écriture de tous les trajets contenus dans la liste des trajets (simples ou composés), 
 	// selon le format choisi, dans le fichier envoie en paramètre fout.
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets enregistrés.
 	// Contrat :
 	// Aucun
 
@@ -148,7 +148,7 @@ public:
 	// Mode d'emploi :
 	// effectue l'écriture d'un trajet composé ou un trajet simple selon le choix envoyé en paramètre, 
 	// dans le fichier fout (choix = true --> TS / choix ==false --> TC)
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets enregistrés.
 	// Contrat :
 	// Aucun
 
@@ -156,7 +156,7 @@ public:
 	// Mode d'emploi :
 	// effectue l'écriture d'un trajet selon la ville de départ ou d'arrivée, envoyée en paramètre, 
 	// dans le fichier fout (choix==true->villeDepart / choix==false->villeArrivee)
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets enregistrés.
 	// Contrat :
 	// Aucun
 
@@ -164,7 +164,7 @@ public:
 	// Mode d'emploi :
 	// effectue l'écriture d'un trajet selon la ville de départ et d'arrivée, envoyées en paramètre, 
 	// dans le fichier fout.
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets enregistrés.
 	// Contrat :
 	// Aucun
 
@@ -174,13 +174,16 @@ public:
 	// dans le fichier fout.
 	// n doit être strictement supérieur à 0 et m ne doit pas dépasser le nombre de 
 	// trajets contenus dans le catalogue.
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets enregistrés.
 	// Contrat :
-	// Aucun
+	// 0<n<=m<=la taille du catalogue
+	// cette vérification est effectué au niveau de programme principal
+	// si on le respecte pas, le programme ne crash pas
 
 	int Chargement(ifstream & fin);
 	// Mode d'emploi :
 	// effectue la lecture de tous les trajets contenus dans le fichier envoyé en paramètre fout.
+	// renvoie le nombre de trajets chargés.
 	// Contrat :
 	// Aucun
 
@@ -188,6 +191,7 @@ public:
 	// Mode d'emploi :
 	// effectue la lecture des trajets simples ou composés, selon le paramètre de choix, contenu dans 
 	// le fichier envoyé en paramètre fout. (choix: true-> TS false->TC)
+	// renvoie le nombre de trajets chargés.
 	// Contrat :
 	// Aucun
 
@@ -195,6 +199,7 @@ public:
 	// Mode d'emploi :
 	// effectue la lecture d'un trajet selon la ville de départ ou d'arrivée, envoyée en paramètre, 
 	// contenu dans le fichier fout (choix==true->villeDepart / choix==false->villeArrivee)
+	// renvoie le nombre de trajets chargés.
 	// Contrat :
 	// Aucun
 
@@ -202,7 +207,7 @@ public:
 	// Mode d'emploi :
 	// effectue la lecture d'un trajet selon la ville de départ et d'arrivée, envoyées en paramètre, 
 	// contenu dans le fichier fout.
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets chargés.
 	// Contrat :
 	// Aucun
 
@@ -212,9 +217,11 @@ public:
 	// contenus dans le fichier fout.
 	// n doit être strictement supérieur à 0 et m ne doit pas dépasser le nombre de 
 	// trajets contenus dans le fichier.
-	// renvoie le nombre de trajets enregistés.
+	// renvoie le nombre de trajets chargés.
 	// Contrat :
-	// Aucun
+	// 0<n<=m<=le nombre de trajet dans le fichier
+	// cette vérification est effectué au niveau de programme principal
+	// si on le respecte pas, le programme ne crash pas
 
 //------------------------------------------------- Surcharge d'opérateurs
 // Aucun
