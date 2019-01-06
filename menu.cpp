@@ -61,9 +61,8 @@ void tryOpenFile(ifstream &fic){
 		}
 	}
 }
-void tryOpenReadingFile(ofstream &fic){
+string& tryOpenReadingFile(ofstream &fic,string& nomFic){
 //gestion de nom de fichier pour l'enregistrement	
-	string nomFic;
        	cout << "¤ Veuillez entrer un nom de fichier !" << endl;
         cout << "  (Vous n'avez pas à entrer l'extension de nom de fichier \".txt\",elle sera ajoutée automatiquement)"<<endl;
         cin >> nomFic;
@@ -88,6 +87,7 @@ void tryOpenReadingFile(ofstream &fic){
      	}
      	fin.close();
        	fic.open(nomFic+".txt");
+	return nomFic;
 }
 void enterNM(int length,int* n,int* m){
 //fonction qui sert à la saisie de n m dans qui ne dépasse pas le length
@@ -307,10 +307,11 @@ int main(){
 				cout<<"-----------------------------------------------"<<endl;
 				if (choixSauv == 1) {
 					ofstream fic;		
-					tryOpenReadingFile(fic);
+					string nomFic;
+					nomFic=tryOpenReadingFile(fic,nomFic);
 					int nb=myliste->Enregistrer(fic);
 					cout<<"-----------------------------------------------"<<endl;
-					cout<<nb<<" trajet(s) enregistré"<<endl;
+					cout<<nb<<" trajet(s) enregistré dans "<<nomFic<<".txt"<<endl;
 					fic.close();		
 				}
 				else if (choixSauv == 2){
@@ -327,29 +328,41 @@ int main(){
 					}
 					if (choixType == 1){
 						ofstream fic;
-						tryOpenReadingFile(fic);
+						string nomFic;
+						nomFic=tryOpenReadingFile(fic,nomFic);
 						int nb=myliste->Enregistrer(fic,true);
 						fic.close();
 						if(nb==0){
+							char filename[100];
+							filename[0]='\0';
+							strcat(filename,nomFic.c_str());
+							strcat(filename,".txt");
+							remove(filename);
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet simple dans ce catalogue !"<<endl;
-							cout<<">>> le fichier est créé mais rien n'est enregistré"<<endl;
+							cout<<">>> le fichier "<<nomFic<<".txt n'est pas créé."<<endl;
 						}else{
 							cout<<"-----------------------------------------------"<<endl;
-							cout<<nb<<" trajet(s) simple(s) enregistré(s)."<<endl;
+							cout<<nb<<" trajet(s) simple(s) enregistré(s) dans"<<nomFic<<".txt"<<endl;
 						}
 					}else{
 						ofstream fic;
-						tryOpenReadingFile(fic);
+						string nomFic;
+						nomFic=tryOpenReadingFile(fic,nomFic);
 						int nb=myliste->Enregistrer(fic,false);
 						fic.close();
 						if(nb==0){
+							char filename[100];
+							filename[0]='\0';
+							strcat(filename,nomFic.c_str());
+							strcat(filename,".txt");
+							remove(filename);
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet composé dans ce catalogue !"<<endl;
-							cout<<">>> le fichier est créé mais rien n'est enregistré"<<endl;
+							cout<<">>> le fichier "<<nomFic<<".txt n'est pas créé."<<endl;
 						}else{
 							cout<<"-----------------------------------------------"<<endl;
-							cout<<nb<<" trajet(s) compos(é) enregistré(s)."<<endl;
+							cout<<nb<<" trajet(s) compos(é) enregistré(s) dans "<<nomFic<<".txt"<<endl;
 						}
 					}
 				}
@@ -369,41 +382,54 @@ int main(){
 					}
 					if (choixV == 1) {
 						ofstream fic;
-						tryOpenReadingFile(fic);
+						string nomFic;
+						nomFic=tryOpenReadingFile(fic,nomFic);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
 						int nb=myliste->Enregistrer(fic,true,vd);
 						fic.close();
 						if(nb==0){
+							char filename[100];
+							filename[0]='\0';
+							strcat(filename,nomFic.c_str());
+							strcat(filename,".txt");
+							remove(filename);
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" trouvé !"<<endl;
-							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+							cout<<">>> le fichier "<<nomFic<<".txt n'est pas créé."<<endl;
 						}else{
 							cout<<"-----------------------------------------------"<<endl;
-							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" enregistré(s) !"<<endl;
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<" enregistré(s) dans"<<nomFic<<".txt"<<endl;
 						}
 					}
 					else if (choixV == 2) {
 						ofstream fic;
-						tryOpenReadingFile(fic);
+						string nomFic;
+						nomFic=tryOpenReadingFile(fic,nomFic);
 						cout << "¤ Veuillez entrer la ville d'arrivée ! " << endl;
 						string va;
 						cin >> va;
 						int nb=myliste->Enregistrer(fic,false, va);	
 						fic.close();
 						if(nb==0){
+							char filename[100];
+							filename[0]='\0';
+							strcat(filename,nomFic.c_str());
+							strcat(filename,".txt");
+							remove(filename);
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville d'arrivée est "<<va<<" trouvé !"<<endl;
-							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+							cout<<">>> le fichier "<<nomFic<<".txt n'est pas créé."<<endl;
 						}else{
 							cout<<"-----------------------------------------------"<<endl;
-							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" enregistré(s) !"<<endl;
+							cout<<nb<<" trajet(s) dont la ville d'arrivée est "<<va<<" enregistré(s) dans"<<nomFic<<".txt"<<endl;
 						}
 					}
 					else{
 						ofstream fic;
-						tryOpenReadingFile(fic);
+						string nomFic;
+						nomFic=tryOpenReadingFile(fic,nomFic);
 						cout << "¤ Veuillez entrer la ville de départ ! " << endl;
 						string vd;
 						cin >> vd;
@@ -413,26 +439,32 @@ int main(){
 						int nb=myliste->Enregistrer(vd,va,fic);
 						fic.close();
 						if(nb==0){
+							char filename[100];
+							filename[0]='\0';
+							strcat(filename,nomFic.c_str());
+							strcat(filename,".txt");
+							remove(filename);
 							cout<<"-----------------------------------------------"<<endl;
 							cout<<">>> message: aucun trajet dont la ville de départ est "<<vd<<" et la ville d'arrivée est "<<va<<" trouvé !"<<endl;
-							cout<<">>> le fichier est crée mais rien n'est enregistré"<<endl;
+							cout<<">>> le fichier "<<nomFic<<".txt n'est pas créé."<<endl;
 						}else{
 							cout<<"-----------------------------------------------"<<endl;
-							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<"et la ville d'arrivée est "<<va<<" enregistré(s) !"<<endl;	
+							cout<<nb<<" trajet(s) dont la ville de départ est "<<vd<<"et la ville d'arrivée est "<<va<<" enregistré(s) dans"<<nomFic<<".txt"<<endl;	
 						}
 					}
 				}
 				else if(choixSauv==4)
 				{
 					ofstream fic;
-					tryOpenReadingFile(fic);
+					string nomFic;
+					nomFic=tryOpenReadingFile(fic,nomFic);
 					int length=myliste->GetLength();
 					int n,m;
 					enterNM(length,&n,&m);
 					int nbEnreg=myliste->Enregistrer(n, m, fic);
 					fic.close();
 					cout<<"-----------------------------------------------"<<endl;
-					cout << nbEnreg << " trajet(s) enregistré(s)." << endl;
+					cout << nbEnreg << " trajet(s) enregistré(s) dans" <<nomFic<<".txt"<< endl;
 				}
 				else if(choixSauv==5)
 				{
